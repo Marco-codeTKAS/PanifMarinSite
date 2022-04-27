@@ -1,7 +1,7 @@
 <template>
     <q-page class="flex ">
         <q-table bordered
-        
+
         >
 
         </q-table>
@@ -10,13 +10,13 @@
 
 <script>
 export default {
-    data() {
-        return {
-            
-        }
-    },
-    methods: {
-        
-    },
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+
+  }
 }
 </script>

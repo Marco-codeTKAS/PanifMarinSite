@@ -7,26 +7,26 @@
                     <q-img src="~/assets/Logo.png" style="max-width:36px; max-height:36px;"></q-img>
                     <p class="text-h4 q-ma-none" >Inicio de Sesion </p>
                     <p class="text-h6 q-ma-none">Bienvenido al Sistema de Panificadora Marin</p>
-                    <p class="text-subtitle">¿No estas registrado? 
+                    <p class="text-subtitle">¿No estas registrado?
                       <q-btn  class="q-pa-none self-baseline" flat label="Registrate" size="md" dense color="primary"/>
-                    </p> 
+                    </p>
               </q-card-section>
               <q-card-section class="column q-gutter-y-xs q-mx-md" style="top:-40px;">
                   <q-input v-model="Usuario" autofocus outlined dense label="Email" hint="Ingresa tu correo" >
                       <template v-slot:prepend>
-                          <q-icon name="person"/>                          
+                          <q-icon name="person"/>
                       </template>
                   </q-input>
                   <q-input v-model="Contraseña" autofocus outlined dense label="Contraseña" hint="Ingresa tu contraseña">
                       <template v-slot:prepend>
-                          <q-icon name="key"/>                          
+                          <q-icon name="key"/>
                       </template>
                   </q-input>
               </q-card-section>
               <q-card-section class="row justify-end q-mx-md">
                   <div class="row">
                       <q-btn @click="ValidarSesion" label="Continuar" size="md" color="primary"/>
-                  </div>                  
+                  </div>
               </q-card-section>
           </q-card>
       </q-dialog>
@@ -34,21 +34,21 @@
 </template>
 
 <script>
-export default { 
-    name:'Login',
-    data() {
-        return {
-            Login:true,
-            Usuario:'',
-            Contraseña:''
-        }
-    },
-    methods: {
-        ValidarSesion(){
-            console.log("validando")
-            this.$router.push('/Repartidores')
-        }
-    },
+export default {
+  name: 'Login',
+  data () {
+    return {
+      Login: true,
+      Usuario: '',
+      Contraseña: ''
+    }
+  },
+  methods: {
+    ValidarSesion () {
+      console.log('validando')
+      this.$router.push('/Repartidores')
+    }
+  }
 }
 </script>
 <style scoped>
