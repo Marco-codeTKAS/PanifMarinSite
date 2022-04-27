@@ -1,45 +1,73 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
+  <q-layout view="lHh Lpr lFf " >
+    <q-header  reveal elevated class="bg-blue-grey-1"  >             
+        <q-toolbar inset>
+          <q-btn
+          v-if="$q.screen.lt.sm"
           flat
           dense
           round
+          color="dark"
+          class="q-mr-xl"
           icon="menu"
-          aria-label="Menu"
+          aria-label="Menu"          
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
+          <q-drawer
+              v-model="leftDrawerOpen"
+              :breakpoint="700"
+              elevated content-class="bg-primary" :width="200"
+            >
+              <q-scroll-area class="fit q-pt-md">
+                
+                <div >
+                  <q-item dense clickable to="Listado">
+                    <q-item-section>
+                      <q-item-label class="text-h6 q-py-md"> <q-icon name="format_list_bulleted"/> Listado de SIM</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </div>
+                <div >
+                  <q-item dense clickable to="Perfil">
+                    <q-item-section>
+                      <q-item-label class="text-h6 q-py-md q-gutter-xs"> <q-icon name="assignment_ind " class="" /> <span>Perfil</span> </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </div>
+              </q-scroll-area>
+            </q-drawer>
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
+          <q-img
+          class="q-mr-xl"
+          src="~assets/img1.svg"
+          style="width:90px;"
+          
+        />
+        
+          <q-btn-toggle
+              v-model="btnToggle"
+              flat    
+              stretch                        
+              class="text-dark q-mx-sm"
+              toggle-color="primary"
+              v-if="$q.screen.gt.xs"
+              :options="[
+                {label: 'Home', value: 'Home', icon:'home', to:'/'},
+                {label: 'Two', value: 'dos'},
+                {label: 'Three', value: 'three'}
+              ]"
+            />
+           <q-toolbar-title></q-toolbar-title>
+             <q-btn flat dense no-wrap stretch to="/Login" label="Iniciar Sesion" color="dark" size="sm" title="Inicia Sesion"/> 
+             <!-- <q-btn flat round dense icon="logout" color="dark" @click="CerrarSesion" title="cerrar Sesion"/> -->
+        </q-toolbar>
 
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
+
+        
+      
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      content-class="bg-grey-1"
-    >
-      <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
-          Essential Links
-        </q-item-label>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
+          
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -47,63 +75,26 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksData = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
 export default {
   name: 'MainLayout',
   components: {
-    EssentialLink
+    
   },
   data () {
     return {
       leftDrawerOpen: false,
-      essentialLinks: linksData
+      btnToggle:'Home'
+      
     }
-  }
+  },
+  methods: {
+    Navegacion(){
+      window.push=''+this.btnToggle
+      this.btnToggle
+    }
+  },
 }
 </script>
+<style >
+  
+</style>
