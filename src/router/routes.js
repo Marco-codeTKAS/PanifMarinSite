@@ -11,12 +11,28 @@ const routes = [
       {
         path: '/Repartidores',
         component: () => import('pages/Repartidores.vue')
+      },
+      {
+        path: '/Usuarios',
+        component: () => import('pages/Usuarios.vue')
+      },
+      {
+        path: '/Rutas',
+        component: () => import('pages/Rutas.vue')
+      },
+      {
+        path: '/Camionetas',
+        component: () => import('pages/Camionetas.vue')
+      },
+      {
+        path: '/Salidas',
+        component: () => import('pages/SalidasdePan.vue')
       }
     ]
   },
   {
-    path: '/Login',
-    component: () => import('pages/Login.vue')
+    path: '/Home',
+    component: () => import('pages/Home.vue')
   },
 
   // Always leave this as last one,
