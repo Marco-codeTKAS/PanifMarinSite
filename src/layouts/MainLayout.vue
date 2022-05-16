@@ -45,7 +45,7 @@
         /> -->
           <!-- Esto se muestra en escritorio -->
 
-          <q-list dense bordered padding  class="q-py-none rounded-borders row">
+          <q-list dense bordered padding  class="q-py-none rounded-borders desktop-only row"   v-if="$q.screen.gt.sm">
             <q-item
               clickable
               v-ripple
@@ -109,6 +109,7 @@
             </q-menu>
 
           </q-list>
+
            <q-toolbar-title></q-toolbar-title>
              <q-btn flat dense no-wrap stretch to="/" label="Cerrar Sesion" color="secondary" text-color="dark" size="md" title="Inicia Sesion"/>
              <!-- <q-btn flat round dense icon="logout" color="dark" @click="CerrarSesion" title="cerrar Sesion"/> -->

@@ -25,7 +25,7 @@
               </q-card-section>
               <q-card-section class="row justify-end q-mx-md">
                   <div class="row">
-                      <q-btn to="/Salidas" flat label="Continuar"  size="md" color="primary"/>
+                      <q-btn to="/Recepcion" flat label="Continuar"  size="md" color="primary"/>
                       <q-btn @click="LoginVerify" label="Continuar"  size="md" color="primary"/>
                   </div>
               </q-card-section>

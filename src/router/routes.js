@@ -25,8 +25,8 @@ const routes = [
         component: () => import('pages/Camionetas.vue')
       },
       {
-        path: '/Salidas',
-        component: () => import('pages/SalidasdePan.vue')
+        path: '/Recepcion',
+        component: () => import('src/pages/RecepciondePan.vue')
       }
     ]
   },
