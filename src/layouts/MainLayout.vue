@@ -13,29 +13,110 @@
           icon="menu"
           aria-label="Menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
-        />
+          />
           <q-drawer
               v-model="leftDrawerOpen"
               :breakpoint="700"
-              elevated content-class="bg-primary" :width="200"
+              elevated content-class="bg-primary" :width="260"
             >
               <q-scroll-area class="fit q-pt-md">
-                <div >
-                  <q-item dense clickable to="Repartidores">
+                <div>
                     <q-item-section>
-                      <q-item-label class="text-h6 q-py-md"> <q-icon name="format_list_bulleted"/> Repartidores</q-item-label>
+                      <q-expansion-item
+                        icon="pin_drop"
+                        label="Entregas"
+                        class="text-h6 q-py-md"
+                      >
+                     <q-list dense bordered padding style="min-width:140px;" class="q-pa-none rounded-borders">
+                <q-item
+                  clickable
+                  v-ripple
+                  @click="linkSubMenu = 'Repartidores'"
+                  :active="linkSubMenu === 'Repartidores'"
+                  exact-active-class="my-menu-link"
+                  active-class="my-menu-link"
+                  to="/Repartidores"
+                >
+                  <q-item-section avatar class="q-py-sm q-px-none">
+                    <q-icon name="local_shipping" size="xs" />
+                  </q-item-section>
+                  <q-item-section>Repartidores</q-item-section>
+                </q-item>
+
+                <q-item
+                  clickable
+                  v-ripple
+                  @click="linkSubMenu = 'camionetas'"
+                  :active="linkSubMenu === 'camionetas'"
+                  exact-active-class="my-menu-link"
+                  active-class="my-menu-link"
+                  to="/Camionetas"
+                >
+                  <q-item-section avatar class="q-py-sm q-px-none">
+                    <q-icon name="local_shipping" size="xs" />
+                  </q-item-section>
+                  <q-item-section>Camionetas</q-item-section>
+                </q-item>
+
+                <q-item
+                  clickable
+                  v-ripple
+                  @click="linkSubMenu = 'rutas'"
+                  :active="linkSubMenu === 'rutas'"
+                  exact-active-class="my-menu-link"
+                  active-class="my-menu-link"
+                  to="/Rutas"
+                >
+                  <q-item-section avatar class="q-py-sm q-px-none">
+                    <q-icon name="map" size="xs"/>
+                  </q-item-section>
+                  <q-item-section>Rutas</q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  v-ripple
+                  @click="linkSubMenu = 'recepcion'"
+                  :active="linkSubMenu === 'recepcion'"
+                  exact-active-class="my-menu-link"
+                  active-class="my-menu-link"
+                  to="/Recepcion"
+                >
+                  <q-item-section avatar class="q-py-sm q-px-none">
+                    <q-icon name="assignment" size="xs"/>
+                  </q-item-section>
+                  <q-item-section>Recepcion</q-item-section>
+                </q-item>
+              </q-list>
+                      </q-expansion-item>
                     </q-item-section>
-                  </q-item>
                 </div>
-                <div >
-                  <q-item dense clickable to="Perfil">
+                <div>
                     <q-item-section>
-                      <q-item-label class="text-h6 q-py-md q-gutter-xs"> <q-icon name="assignment_ind " class="" /> <span>Perfil</span> </q-item-label>
+                      <q-expansion-item
+                        icon="person"
+                        label="Usuarios"
+                        class="text-h6 q-py-md"
+                      >
+                      <div class="q-pt-xs">
+                            <q-item dense @click="mobilActivo = 'Usuario'" v-ripple :active="mobilActivo === 'Usuario'" active-class="my-menu-link" clickable to="Camionetas">
+                              <q-item-section>
+                                <q-item-label class="text-h6 q-py-md q-gutter-xs"> <q-icon name="person" class="" /> <span>Usuario </span> </q-item-label>
+                              </q-item-section>
+                            </q-item>
+                          </div>
+                          <div class="q-pt-xs">
+                            <q-item dense @click="mobilActivo = 'Camionetas'" v-ripple :active="mobilActivo === 'Camionetas'"  clickable  active-class="my-menu-link" to="Camionetas">
+                              <q-item-section>
+                                <q-item-label class="text-h6 q-py-md q-gutter-xs"> <q-icon name="local_shipping" class="" /> <span>Camionetas</span> </q-item-label>
+                              </q-item-section>
+                            </q-item>
+                          </div>
+                      </q-expansion-item>
                     </q-item-section>
-                  </q-item>
                 </div>
+
               </q-scroll-area>
-            </q-drawer>
+          </q-drawer>
 
           <!-- <q-img
           class="q-mr-xl"
@@ -136,7 +217,8 @@ export default {
       leftDrawerOpen: false,
       btnToggle: 'Home',
       linkActivo: 'home',
-      linkSubMenu: ''
+      linkSubMenu: '',
+      mobilActivo: 'home'
 
     }
   },
@@ -150,10 +232,9 @@ export default {
   }
 }
 </script>
-<style >
+<style scoped>
   .my-menu-link{
-    background-color: #1976D2;
-    color:white;
-
+    background-color: #ffffff;
+    color:#1976D2;
   }
 </style>

@@ -2,7 +2,7 @@
   <div class="row" >
       <q-dialog square  content-style="background:linear-gradient(90deg, rgba(46,40,173,1) 0%, rgba(13,85,147,1) 46%, rgba(124,204,210,1) 100%);" full-screen position="right" persistent rounded v-model="Login" >
           <div v-if="$q.screen.gt.sm" class="q-mr-xl q-py-sm q-px-lg no-shadow"  style="margin-right:200px;"><q-img src="~assets/LogoFull.png" alt="" style="width:400px;  "/></div>
-          <q-card class="column justify-around fit q-mr-xl">
+          <q-card class="column justify-around fit q-mx-md">
               <q-card-section class="row q-mx-md self-start">
                     <q-img src="~/assets/Logo.png" style="max-width:36px; max-height:36px;"></q-img>
                     <p class="text-h4 q-ma-none" >Inicio de Sesion </p>
