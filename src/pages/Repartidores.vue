@@ -56,6 +56,16 @@
                     <q-icon name="local_shipping" />
                   </template>
                 </q-input>
+                <q-input v-model="usuario"  outlined dense label="Usuario" hint="Ingresa el email del repartidor">
+                  <template v-slot:prepend>
+                    <q-icon name="mail" />
+                  </template>
+                </q-input>
+                <q-input v-model="password"  outlined dense label="Contraseña" hint="Ingresa la contraseña para el sistema">
+                  <template v-slot:prepend>
+                    <q-icon name="key" />
+                  </template>
+                </q-input>
           </q-card-section>
           <q-card-section class="row">
             <q-btn color="secondary" @click="GuardarRepartidor" label="Guardar"></q-btn>
@@ -78,6 +88,8 @@ export default {
       idcamioneta: '',
       direccion: '',
       telefono: '',
+      usuario: '',
+      password: '',
       // dataTable: [],
       loadingtable: false,
       columns: [
@@ -96,6 +108,7 @@ export default {
   },
   methods: {
     GuardarRepartidor () {
+      const vm = this
       this.$axios.post('Repartidores', {
         Nombre: this.nombre,
         idCamioneta: this.idcamioneta,
@@ -104,8 +117,27 @@ export default {
         Telefono: this.telefono
       }).then(res => {
         if (res.data) {
+          vm.$axios.post('Usuarios', {
+            nombre: vm.nombre,
+            usuario: vm.usuario,
+            password: vm.password,
+            idRol: 3
+          }).then(res => {
+            if (res.data) {
+              console.log(res.data)
+              this.$q.notify({
+                message: 'Repartidor registrado como usuario.',
+                color: 'secondary'
+              })
+              vm.ConsultaRepartidores()
+            }
+          })
           console.log(res.data)
-          this.ConsultaRepartidores()
+          vm.ConsultaRepartidores()
+          this.$q.notify({
+            message: 'Repartidor registrado.',
+            color: 'secondary'
+          })
         }
       })
     },
