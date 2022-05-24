@@ -4,7 +4,7 @@
           <div v-if="$q.screen.gt.sm" class="q-mr-xl q-py-sm q-px-lg no-shadow"  style="margin-right:200px;"><q-img src="~assets/LogoFull.png" alt="" style="width:400px;  "/></div>
           <q-card class="column justify-around fit q-mx-md">
               <q-card-section class="row q-mx-md self-start">
-                    <q-img src="~/assets/Logo.png" style="max-width:36px; max-height:36px;"></q-img>
+                    <q-img contain src="~/assets/Logo.png" style="max-width:40px; max-height:40px;"></q-img>
                     <p class="text-h4 q-ma-none" >Inicio de Sesion </p>
                     <p class="text-h6 q-ma-none">Bienvenido al Sistema de Panificadora Marin</p>
                     <p class="text-subtitle">¿No estas registrado?

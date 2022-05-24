@@ -27,6 +27,10 @@ const routes = [
       {
         path: '/Recepcion',
         component: () => import('src/pages/RecepciondePan.vue')
+      },
+      {
+        path: '/ROverview',
+        component: () => import('src/pages/RepartidorOverview.vue')
       }
     ]
   },

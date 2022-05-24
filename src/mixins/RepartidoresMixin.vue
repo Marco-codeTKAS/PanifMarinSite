@@ -8,7 +8,6 @@ export default {
   },
   created () {
     this.ConsultaRepartidores()
-    console.log(this.dataRepartidores)
   },
   methods: {
     ConsultaRepartidores () {
