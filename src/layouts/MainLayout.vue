@@ -183,10 +183,10 @@ export default {
           vm.$store.commit('user/updateLogueado', res.data)
         } else {
           vm.$store.commit('user/updateLogueado', null)
-          window.location.href = '/Login'
+          // window.location.href = '/Login'
         }
       }).catch(e => {
-        window.location.href = '/Login'
+        // window.location.href = '/Login'
         console.log('mensaje de error' + e.response.message)
         if (e.message === 'Network Error') {
           console.log('No hay wifi')
