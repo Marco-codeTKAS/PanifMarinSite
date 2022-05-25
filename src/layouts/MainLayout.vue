@@ -155,8 +155,44 @@ export default {
   },
   created () {
     this.$axios.defaults.headers.common.Token = this.$q.localStorage.getItem('Token')
+
+    const tokeninicio = this.$q.localStorage.getItem('Token')
+
+    if (tokeninicio && tokeninicio !== '') {
+      this.$axios.defaults.headers.common.Token = tokeninicio
+
+      if (window.location.href === 'http://localhost:8080/') {
+        window.location.href = '/Listado'
+      }
+      this.MostrarToken()
+      this.tiempo = setInterval(() => {
+        this.MostrarToken()
+      }, 180000)
+    } else {
+      alert('Cerrando')
+      window.location.href = '/Login'
+      clearInterval(this.tiempo)
+      this.tiempo = false
+    }
   },
   methods: {
+    MostrarToken () {
+      const vm = this
+      this.$axios.get('https://localhost:44334/api/Usuarios/ConsultaToken').then(res => {
+        if (res.data.idacceso > 0) {
+          vm.$store.commit('user/updateLogueado', res.data)
+        } else {
+          vm.$store.commit('user/updateLogueado', null)
+          window.location.href = '/Login'
+        }
+      }).catch(e => {
+        window.location.href = '/Login'
+        console.log('mensaje de error' + e.response.message)
+        if (e.message === 'Network Error') {
+          console.log('No hay wifi')
+        }
+      })
+    },
     Navegacion () {
       window.push = '' + this.btnToggle
     }

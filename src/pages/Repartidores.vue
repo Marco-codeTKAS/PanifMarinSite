@@ -27,6 +27,8 @@
               </template>
 
         </q-table>
+
+        <h2 class="text-h2 text-secondary">Ora Perro no le vayas a mover a nada hdpt ¡¡¡¡¡</h2>
       <q-dialog v-model="modalregistro">
         <q-card>
           <q-card-section> <p class="text-h4">Registro de Repartidores </p></q-card-section>

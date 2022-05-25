@@ -69,6 +69,7 @@ export default {
         if (res.data) {
           vm.$q.localStorage.set('Token', res.data.token)
           vm.$q.localStorage.set('Rol', res.data.rol)
+          vm.$store.commit('user/updateLogueado', res.data)
           vm.$axios.defaults.headers.common.token = res.data.token
           if (res.data.total > 0) {
             this.modalexceso = true
@@ -79,6 +80,9 @@ export default {
             } else {
               vm.$q.localStorage.remove('email')
               vm.$q.localStorage.remove('password')
+            }
+            if (res.data.rol === 3) {
+              this.$router.push('/ROverview')
             }
             this.$router.push('/Repartidores')
           }

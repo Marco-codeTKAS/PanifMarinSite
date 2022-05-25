@@ -2,7 +2,7 @@
     <q-page>
         <q-card class="row q-my-none">
           <q-card-section>
-              <h4 class="text-h6 q-mx-md q-my-xs" style="text-align:center;">{{}}</h4>
+              <h4 class="text-h6 q-mx-md q-my-xs" style="text-align:center;">{{this.dataRepartidor}}</h4>
           </q-card-section>
           <q-card-section class="row full-width q-py-none items-baseline justify-around"  >
               <h4 class="text-subtitle1 q-mt-sm q-mb-none" style="text-align:center;">Realiza tu pedido</h4>
@@ -13,7 +13,7 @@
             </div>
           </q-card-section>
           <q-card-section class="row full-width justify-end" >
-            <q-btn label="Guardar" @click="GuardarData" color="primary"></q-btn>
+            <q-btn label="Guardar" @click="HacerPedido" color="primary"></q-btn>
           </q-card-section>
         </q-card>
     </q-page>
@@ -31,15 +31,19 @@ export default {
       dataRepartidor: null
     }
   },
-  mounted () {
+  Created () {
     console.log(this.dataRepartidores)
+    this.DatosRepartidor()
   },
   methods: {
-    GuardarData () {
+    HacerPedido () {
+      this.$axios.Post('Repartidores/RealizaPedido',
+        {
 
+        })
     },
     DatosRepartidor () {
-      this.$axios.get('Repartidores').then(res => {
+      this.$axios.get('Repartidores/DatosRepartidor').then(res => {
         this.dataRepartidor = res.data
       })
     }
