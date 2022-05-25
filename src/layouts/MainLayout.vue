@@ -170,9 +170,9 @@ export default {
       }, 180000)
     } else {
       alert('Cerrando')
-      window.location.href = '/Login'
-      clearInterval(this.tiempo)
-      this.tiempo = false
+      // window.location.href = '/Login'
+      // clearInterval(this.tiempo)
+      // this.tiempo = false
     }
   },
   methods: {
