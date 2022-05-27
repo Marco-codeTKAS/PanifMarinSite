@@ -161,15 +161,11 @@ export default {
     if (tokeninicio && tokeninicio !== '') {
       this.$axios.defaults.headers.common.Token = tokeninicio
 
-      if (window.location.href === 'http://localhost:8080/') {
-        window.location.href = '/Listado'
-      }
       this.MostrarToken()
       this.tiempo = setInterval(() => {
         this.MostrarToken()
       }, 180000)
     } else {
-      alert('Cerrando')
       // window.location.href = '/Login'
       // clearInterval(this.tiempo)
       // this.tiempo = false
@@ -178,7 +174,7 @@ export default {
   methods: {
     MostrarToken () {
       const vm = this
-      this.$axios.get('https://localhost:44334/api/Usuarios/ConsultaToken').then(res => {
+      this.$axios.get('Usuarios/ConsultaToken').then(res => {
         if (res.data.idacceso > 0) {
           vm.$store.commit('user/updateLogueado', res.data)
         } else {

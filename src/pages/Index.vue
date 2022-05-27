@@ -34,8 +34,9 @@
       <q-dialog v-model="modalexceso" persistent>
       <q-card class="my-card">
         <q-card-section >
-          <span class="text-h6">Demasiadas sesiones </span>
-          <p>Para poder acceder debe cerrar las sesiones que esten abiertas</p>
+          <q-img contain src="~/assets/Logo.png" style="max-width:40px; max-height:40px;"></q-img>
+          <span class="text-h6 ">Demasiadas sesiones </span>
+          <p class="q-mt-md" >Para poder acceder debe cerrar las sesiones que esten abiertas</p>
         </q-card-section>
         <q-card-section class="row q-gutter-x-md justify-end">
           <q-btn label="Cerrar" color="primary" flat v-close-popup></q-btn>
