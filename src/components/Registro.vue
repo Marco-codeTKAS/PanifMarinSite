@@ -107,7 +107,7 @@ export default {
       isPwd: true,
       isPwd2: true,
       confirma: '',
-      options: ['usuario', 'admin']
+      options: ['Usuario', 'Admin', 'Repartidor']
 
     }
   },
@@ -142,7 +142,7 @@ export default {
           nombre: this.nombreinput,
           usuario: this.emailinput,
           contraseña: this.contrasenainput,
-          rol: this.perfilinput === 'usuario' ? 1 : this.perfilinput === 'admin' ? 2 : 0,
+          rol: this.perfilinput === 'Usuario' ? 1 : this.perfilinput === 'Admin' ? 2 : this.perfilinput === 'Repartidor' ? 3 : 0,
           estatus: 1
         }).then(res => {
           console.log(res.data)
