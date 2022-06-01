@@ -110,20 +110,23 @@ export default {
   },
   methods: {
     GuardarRepartidor () {
+      console.log(' en el metodo guardar')
       const vm = this
-      this.$axios.post('Repartidores', {
-        Nombre: this.nombre,
-        idCamioneta: this.idcamioneta,
-        idRuta: this.idruta,
-        Direccion: this.direccion,
-        Telefono: this.telefono
+      this.$axios.post('Usuarios', {
+        nombre: vm.nombre,
+        usuario: vm.usuario,
+        password: vm.password,
+        idRol: 3
       }).then(res => {
+        console.log(res.data)
         if (res.data) {
-          vm.$axios.post('Usuarios', {
-            nombre: vm.nombre,
-            usuario: vm.usuario,
-            password: vm.password,
-            idRol: 3
+          vm.$axios.post('Repartidores', {
+            Nombre: this.nombre,
+            idCamioneta: this.idcamioneta,
+            idRuta: this.idruta,
+            Direccion: this.direccion,
+            Telefono: this.telefono,
+            idUsuario: res.data.idUsuario
           }).then(res => {
             if (res.data) {
               console.log(res.data)
