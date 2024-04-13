@@ -12,7 +12,7 @@
         />
           <!-- Esto se muestra en escritorio -->
 
-          <q-list dense  padding class="q-py-none q-gutter-x-sm rounded-borders desktop-only row"   v-if="$q.screen.gt.sm">
+          <q-list dense  padding class="q-py-md q-gutter-x-sm rounded-borders desktop-only row"   v-if="$q.screen.gt.sm">
             <q-item
               clickable
               v-ripple

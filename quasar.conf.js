@@ -19,7 +19,7 @@ module.exports = function (/* ctx */) {
     // preFetch: true,
 
     // app boot file (/src/boot)
-    // --> boot files are part of "main.js"
+    // --> boot files are part of 'main.js'
     // https://v1.quasar.dev/quasar-cli/boot-files
     boot: ['i18n', 'axios'],
 
@@ -48,7 +48,7 @@ module.exports = function (/* ctx */) {
 
       // Add dependencies for transpiling with Babel (Array of string/regex)
       // (from node_modules, which are by default not transpiled).
-      // Applies only if "transpile" is set to true.
+      // Applies only if 'transpile' is set to true.
       // transpileDependencies: [],
 
       // rtl: false, // https://v1.quasar.dev/options/rtl-support
@@ -61,8 +61,8 @@ module.exports = function (/* ctx */) {
       // extractCSS: false,
 
       // https://v1.quasar.dev/quasar-cli/handling-webpack
-      // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpack (chain) {
+      // 'chain' is a webpack-chain object https://github.com/neutrinojs/webpack-chain
+      chainWebpack(chain) {
         chain
           .plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
@@ -81,13 +81,13 @@ module.exports = function (/* ctx */) {
       iconSet: 'material-icons', // Quasar icon set
       lang: 'es', // Quasar language pack
       config: {},
-
-      // Possible values for "importStrategy":
+      cssAddon: true,
+      // Possible values for 'importStrategy':
       // * 'auto' - (DEFAULT) Auto-import needed Quasar components & directives
       // * 'all'  - Manually specify what to import
       importStrategy: 'auto',
 
-      // For special cases outside of where "auto" importStrategy can have an impact
+      // For special cases outside of where 'auto' importStrategy can have an impact
       // (like functional components as one of the examples),
       // you can manually specify Quasar components/directives to be available everywhere:
       //
@@ -183,7 +183,7 @@ module.exports = function (/* ctx */) {
       // More info: https://v1.quasar.dev/quasar-cli/developing-electron-apps/node-integration
       nodeIntegration: true,
 
-      extendWebpack (/* cfg */) {
+      extendWebpack(/* cfg */) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
       }

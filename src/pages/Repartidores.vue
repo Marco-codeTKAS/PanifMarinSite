@@ -1,81 +1,77 @@
 <template>
-    <q-page class="column justify-start">
-      <div class=" row justify-end">
-        <q-btn dense  icon="person_add"  color="primary" align="right" @click="Registro=>{this.modalregistro = true}" class="q-my-sm q-mx-lg q-px-sm"></q-btn>
-      </div>
-        <q-table bordered
-          title="REPARTIDORES"
-          :data="dataRepartidores"
-          :columns="columns"
-          dense
-          class="q-mx-md "
-          row-key="indice"
-          :loading="loadingtable"
-        >
-        <template v-slot:body-cell-Eliminar="props">
-                <q-td :props="props" >
-                  <q-btn icon="clear" flat size="sm" dense  color="negative" @click="Eliminar(props.row.idUsuario)"  > </q-btn>
-                </q-td>
+  <q-page class="column justify-start">
+    <div class=" row justify-end">
+      <q-btn dense icon="person_add" color="primary" align="right" @click="Registro => { this.modalregistro = true }"
+        class="q-my-sm q-mx-lg q-px-sm"></q-btn>
+    </div>
+    <q-table bordered title="REPARTIDORES" :data="dataRepartidores" :columns="columns" dense class="q-mx-md "
+      row-key="indice" :loading="loadingtable">
+      <template v-slot:body-cell-Eliminar="props">
+        <q-td :props="props">
+          <q-btn icon="clear" flat size="sm" dense color="negative" @click="Eliminar(props.row.idUsuario)"> </q-btn>
+        </q-td>
 
-              </template>
+      </template>
 
-              <template v-slot:body-cell-Editar="props">
-                <q-td :props="props">
-                  <q-btn icon="edit" flat size="sm" dense color="indigo"  @click="Seleccion(props.row.idUsuario)" > </q-btn>
-                </q-td>
+      <template v-slot:body-cell-Editar="props">
+        <q-td :props="props">
+          <q-btn icon="edit" flat size="sm" dense color="indigo" @click="Seleccion(props.row.idUsuario)"> </q-btn>
+        </q-td>
+      </template>
 
-              </template>
-
-        </q-table>
-
-        <h2 class="text-h2 text-secondary">Ora Perro no le vayas a mover a nada hdpt ¡¡¡¡¡</h2>
-      <q-dialog v-model="modalregistro">
-        <q-card>
-          <q-card-section> <p class="text-h4">Registro de Repartidores </p></q-card-section>
-          <q-card-section class="row q-px-xl q-gutter-md">
-                <q-input class="fit" v-model="nombre" autofocus outlined dense label="Nombre" hint="Ingresa tu Nombre">
-                  <template v-slot:prepend>
-                    <q-icon name="person" />
-                  </template>
-                </q-input>
-                <q-input class="fit" v-model="telefono"  outlined dense label="Numero Telefonico" hint="Ingresa eel telefono del repartidor">
-                  <template v-slot:prepend>
-                    <q-icon name="call" />
-                  </template>
-                </q-input>
-                <q-input class="fit" v-model="direccion"  outlined dense label="direccion" hint="Ingresa la direccion del repartidor">
-                  <template v-slot:prepend>
-                    <q-icon name="room" />
-                  </template>
-                </q-input>
-                <q-input v-model="idruta"  outlined dense label="Ruta" hint="Ingresa el numero de ruta que tomara">
-                  <template v-slot:prepend>
-                    <q-icon name="map" />
-                  </template>
-                </q-input>
-                <q-input v-model="idcamioneta"  outlined dense label="Camioneta" hint="Ingresa el numero de camioneta asignada">
-                  <template v-slot:prepend>
-                    <q-icon name="local_shipping" />
-                  </template>
-                </q-input>
-                <q-input v-model="usuario"  outlined dense label="Usuario" hint="Ingresa el email del repartidor">
-                  <template v-slot:prepend>
-                    <q-icon name="mail" />
-                  </template>
-                </q-input>
-                <q-input v-model="password"  outlined dense label="Contraseña" hint="Ingresa la contraseña para el sistema">
-                  <template v-slot:prepend>
-                    <q-icon name="key" />
-                  </template>
-                </q-input>
-          </q-card-section>
-          <q-card-section class="row">
-            <q-btn color="secondary" @click="GuardarRepartidor" label="Guardar"></q-btn>
-            <q-btn label="Cerrar" v-close-popup></q-btn>
-          </q-card-section>
-        </q-card>
-      </q-dialog>
-    </q-page>
+    </q-table>
+    <q-dialog v-model="modalregistro">
+      <q-card>
+        <q-card-section>
+          <p class="text-h4">Registro de Repartidores </p>
+        </q-card-section>
+        <q-card-section class="row q-px-xl q-gutter-md">
+          <q-input class="fit" v-model="nombre" autofocus outlined dense label="Nombre" hint="Ingresa tu Nombre">
+            <template v-slot:prepend>
+              <q-icon name="person" />
+            </template>
+          </q-input>
+          <q-input class="fit" v-model.number="telefono" maxlength="10" outlined dense label="Numero Telefonico"
+            hint="Ingresa eel telefono del repartidor">
+            <template v-slot:prepend>
+              <q-icon name="call" />
+            </template>
+          </q-input>
+          <q-input class="fit" v-model="direccion" outlined dense label="direccion"
+            hint="Ingresa la direccion del repartidor">
+            <template v-slot:prepend>
+              <q-icon name="room" />
+            </template>
+          </q-input>
+          <q-input v-model="idruta" outlined dense label="Ruta" hint="Ingresa el numero de ruta que tomara">
+            <template v-slot:prepend>
+              <q-icon name="map" />
+            </template>
+          </q-input>
+          <q-input v-model="idcamioneta" outlined dense label="Camioneta"
+            hint="Ingresa el numero de camioneta asignada">
+            <template v-slot:prepend>
+              <q-icon name="local_shipping" />
+            </template>
+          </q-input>
+          <q-input v-model="usuario" outlined dense label="Usuario" hint="Ingresa el email del repartidor">
+            <template v-slot:prepend>
+              <q-icon name="mail" />
+            </template>
+          </q-input>
+          <q-input v-model="password" outlined dense label="Contraseña" hint="Ingresa la contraseña para el sistema">
+            <template v-slot:prepend>
+              <q-icon name="key" />
+            </template>
+          </q-input>
+        </q-card-section>
+        <q-card-section class="row q-px-xl column-gap">
+          <q-btn color="secondary" @click="GuardarRepartidor" label="Guardar"></q-btn>
+          <q-btn label="Cerrar" v-close-popup></q-btn>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+  </q-page>
 </template>
 
 <script>
@@ -110,9 +106,8 @@ export default {
   },
   methods: {
     GuardarRepartidor () {
-      console.log(' en el metodo guardar')
       const vm = this
-      this.$axios.post('Usuarios', {
+      this.$axios.post('Repartidores', {
         nombre: vm.nombre,
         usuario: vm.usuario,
         password: vm.password,
