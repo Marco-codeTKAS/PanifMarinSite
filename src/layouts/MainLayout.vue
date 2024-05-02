@@ -101,7 +101,7 @@ export default {
           if (res.data.idacceso > 0) {
             vm.$store.commit('user/updateLogueado', res.data)
             vm.usuario = res.data
-            this.listFormularios = paths.filter(el => el.rolsWithPermision.includes(this.usuario.usuario.rol))
+            this.listFormularios = paths// .filter(el => el.rolsWithPermision.includes(this.usuario.usuario.rol))
 
             this.RedirectFromUserPermision()
           } else {

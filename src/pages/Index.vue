@@ -21,7 +21,7 @@
                 <q-icon name="person" />
               </template>
             </q-input>
-            <q-input v-model="password" autofocus outlined dense label="Contraseña" hint="Ingresa tu contraseña">
+            <q-input v-model="password" type="password" autofocus outlined dense label="Contraseña" hint="Ingresa tu contraseña">
               <template v-slot:prepend>
                 <q-icon name="key" />
               </template>
@@ -90,7 +90,7 @@ export default {
             // if (res.data.rol === 3) {
             //   this.$router.push('/ROverview')
             // }
-            this.$router.push('/Repartidores')
+            this.$router.push('/Reparaciones')
           }
         }
       }).catch(e => {
