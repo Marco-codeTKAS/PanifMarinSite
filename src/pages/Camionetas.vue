@@ -25,9 +25,9 @@
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <div class="row align-center">
-            <q-btn icon="construction" flat color="secondary" round to="/Repartidores"></q-btn>
-            <q-btn icon="edit" color="primary" flat round @click.stop="Seleccion('',props.row)"></q-btn>
-            <q-btn icon="delete" color="negative" flat round @click.stop="Eliminar"></q-btn>
+            <q-btn icon="construction" flat color="secondary" round @click="LeaveToReparaciones(props.row)"></q-btn>
+            <!-- <q-btn icon="edit" color="primary" flat round @click.stop="Seleccion('',props.row)"></q-btn>
+            <q-btn icon="delete" color="negative" flat round @click.stop="Eliminar"></q-btn> -->
           </div>
         </q-td>
       </template>
@@ -264,6 +264,10 @@ export default {
         }).finally(() => {
 
         })
+    },
+    LeaveToReparaciones (row) {
+      console.log(row.idCamioneta)
+      this.$router.push({ path: '/reparaciones/' + row.idCamioneta })
     },
     ObtenerCamioneta () {
       this.loadingtable = true

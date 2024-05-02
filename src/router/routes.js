@@ -21,6 +21,14 @@ const routes = [
         component: () => import('pages/Rutas.vue')
       },
       {
+        path: '/NewReparacion',
+        component: () => import('pages/NewReparacion.vue')
+      },
+      {
+        path: '/Reparaciones/:idCamioneta?',
+        component: () => import('pages/Reparacion.vue')
+      },
+      {
         path: '/Camionetas',
         component: () => import('pages/Camionetas.vue')
       },

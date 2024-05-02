@@ -10,24 +10,26 @@
           <q-img contain src="~/assets/Logo.png" style="max-width:40px; max-height:40px;"></q-img>
           <p class="text-h4 q-ma-none">Inicio de Sesion </p>
           <p class="text-h6 q-ma-none">Bienvenido al Sistema de Panificadora Marin</p>
-          <p class="text-subtitle">¿No estas registrado?
+          <!-- <p class="text-subtitle">¿No estas registrado?
             <q-btn class="q-pa-none self-baseline" flat label="Registrate" size="md" dense color="primary" />
-          </p>
+          </p> -->
         </q-card-section>
         <q-card-section class="column q-gutter-y-xs q-mx-md" style="top:-40px;">
-          <q-input v-model="Usuario" autofocus outlined dense label="Email" hint="Ingresa tu correo">
-            <template v-slot:prepend>
-              <q-icon name="person" />
-            </template>
-          </q-input>
-          <q-input v-model="password" autofocus outlined dense label="Contraseña" hint="Ingresa tu contraseña">
-            <template v-slot:prepend>
-              <q-icon name="key" />
-            </template>
-          </q-input>
-          <div class="row">
-            <q-btn @click="LoginVerify" label="" size="md" color="primary" />
-          </div>
+          <q-form @submit.prevent="LoginVerify">
+            <q-input v-model="Usuario" autofocus outlined dense label="Email" hint="Ingresa tu correo">
+              <template v-slot:prepend>
+                <q-icon name="person" />
+              </template>
+            </q-input>
+            <q-input v-model="password" autofocus outlined dense label="Contraseña" hint="Ingresa tu contraseña">
+              <template v-slot:prepend>
+                <q-icon name="key" />
+              </template>
+            </q-input>
+            <div class="row justify-end">
+              <q-btn type="submit" label="Entrar" size="md" color="primary" />
+            </div>
+          </q-form>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -61,6 +63,9 @@ export default {
   methods: {
     LoginVerify () {
       const vm = this
+      this.$q.loading.show({
+        message: 'Iniciando sesión <span class="text-orange text-weight-bold">Espera...</span>'
+      })
       this.$axios.post('Usuarios/Login', {
         email: this.Usuario,
         password: this.password
@@ -82,14 +87,16 @@ export default {
               vm.$q.localStorage.remove('email')
               vm.$q.localStorage.remove('password')
             }
-            if (res.data.rol === 3) {
-              this.$router.push('/ROverview')
-            }
+            // if (res.data.rol === 3) {
+            //   this.$router.push('/ROverview')
+            // }
             this.$router.push('/Repartidores')
           }
         }
       }).catch(e => {
         console.log(e.message)
+      }).finally(() => {
+        this.$q.loading.hide()
       })
     },
     CerrarSesionesActivas (token) {
