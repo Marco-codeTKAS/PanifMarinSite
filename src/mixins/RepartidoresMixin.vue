@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'consultas',
+  name: 'consultasMixin',
   data () {
     return {
       dataRepartidores: []

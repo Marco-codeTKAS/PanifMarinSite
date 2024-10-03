@@ -3,48 +3,148 @@
     <q-header reveal elevated class="bg-blue-grey-1">
       <q-toolbar inset>
         <!-- Esto se muestra solo en movil -->
-        <MenuMobil></MenuMobil>
-        <q-img class="q-mr-xl" src="~assets/img1.svg" style="width: 90px" />
-        <!-- Esto se muestra en escritorio -->
+         <div class="row col justify-around">
+           <q-img class="q-px-sm " src="~assets/img1.svg" fit="contain" style="width: 90px" />
+           <div class="row" v-if="$q.screen.height < 900">
+             <q-btn
+               v-if="$q.screen.lt.sm"
+               flat
+               dense
+               round
+               color="dark"
+               icon="menu"
+               aria-label="Menu"
+               @click="leftDrawerOpen = !leftDrawerOpen"
+             />
+           </div>
+           <!-- Esto se muestra en escritorio -->
+           <q-list
+             dense
+             padding
+             class="q-py-md q-gutter-x-sm rounded-borders row"
+             v-else
+           >
+             <q-item
+               v-for="(item, index) in listFormularios"
+               :key="index"
+               clickable
+               v-ripple
+               @click="linkActivo = item.linkActivo"
+               :active="linkActivo === item.linkActivo"
+               active-class="text-white bg-primary"
+               class="text-dark"
+               style="border: 1px rgb(109, 105, 105)"
+               :ref="item.ref"
+             >
+               <q-item-section avatar class="q-py-xs q-px-none">
+                 <q-icon :name="item.icon" />
+               </q-item-section>
+               <q-item-section>{{ item.name }}</q-item-section>
+   
+               <q-menu fit content-class="" v-if="item.children.length > 0">
+                 <q-list
+                   dense
+                   bordered
+                   padding
+                   style="min-width: 140px"
+                   class="q-pa-none rounded-borders"
+                   v-for="(children, index2) in item.children"
+                   :key="index2"
+                 >
+                   <q-item
+                     clickable
+                     v-ripple
+                     @click="linkSubMenu = children.linkSubMenu"
+                     :active="linkSubMenu === children.linkSubMenu"
+                     exact-active-class="my-menu-link"
+                     active-class="my-menu-link"
+                     :to="children.to"
+                   >
+                     <q-item-section avatar class="q-py-sm q-px-none">
+                       <q-icon :name="children.icon" size="xs" />
+                     </q-item-section>
+                     <q-item-section>{{ children.name }}</q-item-section>
+                   </q-item>
+                 </q-list>
+               </q-menu>
+             </q-item>
+   
+             <!-- <q-item clickable v-ripple @click="linkActivo = 'pan'" :active="linkActivo === 'pan'"
+         active-class="text-white bg-primary" class="text-dark">
+         <q-item-section avatar class="q-py-xs q-px-none">
+           
+           <q-icon name="pin_drop" />
+         </q-item-section>
+         <q-item-section>Pan</q-item-section>
+       </q-item> -->
+           </q-list>
+         </div>
 
-        <q-list dense padding class="q-py-md q-gutter-x-sm rounded-borders desktop-only row" v-if="$q.screen.gt.sm">
-          <q-item v-for="(item,index) in listFormularios" :key="index" clickable v-ripple @click="linkActivo = item.linkActivo" :active="linkActivo === item.linkActivo"
-            active-class="text-white bg-primary" class="text-dark" style="border: 1px rgb(109, 105, 105)"
-            :ref="item.ref">
+        <q-toolbar-title></q-toolbar-title>
+        <q-btn
+          flat
+          dense
+          no-wrap
+          stretch
+          @click="CerrarSesion"
+          label="Cerrar Sesion"
+          color="secondary"
+          text-color="dark"
+          size="md"
+          title="Inicia Sesion"
+        />
+        <!-- <q-btn flat round dense icon="logout" color="dark" @click="CerrarSesion" title="cerrar Sesion"/> -->
+      </q-toolbar>
+      <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-1">
+        <q-list>
+          <q-item-label header class="text-grey-8">
+            <q-item
+            v-for="(item, index) in listFormularios"
+            :key="index"
+            clickable
+            v-ripple
+            @click="linkActivo = item.linkActivo"
+            :active="linkActivo === item.linkActivo"
+            active-class="text-white bg-primary"
+            class="text-dark"
+            style="border: 1px rgb(109, 105, 105)"
+            :ref="item.ref"
+          >
             <q-item-section avatar class="q-py-xs q-px-none">
               <q-icon :name="item.icon" />
             </q-item-section>
-            <q-item-section>{{item.name}}</q-item-section>
+            <q-item-section>{{ item.name }}</q-item-section>
 
             <q-menu fit content-class="" v-if="item.children.length > 0">
-              <q-list dense bordered padding style="min-width: 140px" class="q-pa-none rounded-borders" v-for="(children,index2) in item.children" :key="index2">
-                <q-item clickable v-ripple @click="linkSubMenu = children.linkSubMenu"
-                  :active="linkSubMenu === children.linkSubMenu" exact-active-class="my-menu-link" active-class="my-menu-link"
-                  :to="children.to">
+              <q-list
+                dense
+                bordered
+                padding
+                style="min-width: 140px"
+                class="q-pa-none rounded-borders"
+                v-for="(children, index2) in item.children"
+                :key="index2"
+              >
+                <q-item
+                  clickable
+                  v-ripple
+                  @click="linkSubMenu = children.linkSubMenu"
+                  :active="linkSubMenu === children.linkSubMenu"
+                  exact-active-class="my-menu-link"
+                  active-class="my-menu-link"
+                  :to="children.to"
+                >
                   <q-item-section avatar class="q-py-sm q-px-none">
                     <q-icon :name="children.icon" size="xs" />
                   </q-item-section>
-                  <q-item-section>{{children.name}}</q-item-section>
+                  <q-item-section>{{ children.name }}</q-item-section>
                 </q-item>
-
               </q-list>
             </q-menu>
           </q-item>
-
-          <!-- <q-item clickable v-ripple @click="linkActivo = 'pan'" :active="linkActivo === 'pan'"
-            active-class="text-white bg-primary" class="text-dark">
-            <q-item-section avatar class="q-py-xs q-px-none">
-              <q-icon name="pin_drop" />
-            </q-item-section>
-            <q-item-section>Pan</q-item-section>
-          </q-item> -->
+          </q-item-label>
         </q-list>
-
-        <q-toolbar-title></q-toolbar-title>
-        <q-btn flat dense no-wrap stretch to="/" label="Cerrar Sesion" color="secondary" text-color="dark" size="md"
-          title="Inicia Sesion" />
-        <!-- <q-btn flat round dense icon="logout" color="dark" @click="CerrarSesion" title="cerrar Sesion"/> -->
-      </q-toolbar>
+      </q-drawer>
     </q-header>
 
     <q-page-container>
@@ -54,93 +154,114 @@
 </template>
 
 <script>
-import MenuMobil from '../components/MenuMobil.vue'
-import { paths } from '../Utils/Paths'
+import { useService } from "src/Utils/Servicio";
+import { paths } from "../Utils/Paths";
+import { useRutasStore } from "src/stores/example-store";
 export default {
-  name: 'MainLayout',
-  components: {
-    MenuMobil
-  },
-  data () {
+  name: "MainLayout",
+
+  data() {
     return {
-      btnToggle: 'Home',
-      linkActivo: 'home',
-      linkSubMenu: '',
+      btnToggle: "Home",
+      linkActivo: "home",
+      linkSubMenu: "",
+      leftDrawerOpen: false,
       usuario: {},
-      mobilActivo: 'home',
-      listFormularios: []
-    }
+      mobilActivo: "home",
+      listFormularios: [],
+    };
   },
-  created () {
+  created() {
     this.$axios.defaults.headers.common.Token =
-      this.$q.localStorage.getItem('Token')
+      this.$q.localStorage.getItem("Token");
 
-    const tokeninicio = this.$q.localStorage.getItem('Token')
+    const tokeninicio = this.$q.localStorage.getItem("Token");
 
-    if (tokeninicio && tokeninicio !== '') {
-      this.$axios.defaults.headers.common.Token = tokeninicio
+    if (tokeninicio && tokeninicio !== "") {
+      this.$axios.defaults.headers.common.Token = tokeninicio;
 
-      this.SelectRouteFromUrl()
-      this.MostrarToken()
+      //this.SelectRouteFromUrl()
+      this.MostrarToken();
       this.tiempo = setInterval(() => {
-        this.MostrarToken()
-      }, 180000)
+        this.MostrarToken();
+      }, 180000);
     } else {
-      // window.location.href = '/Login'
-      // clearInterval(this.tiempo)
-      // this.tiempo = false
+      this.$router.push({ path: "/Login" });
+      clearInterval(this.tiempo);
+      this.tiempo = false;
     }
+    this.obtenerDataBase();
   },
   methods: {
-    MostrarToken () {
-      const vm = this
+    CerrarSesion() {
+      const serv = useService("Usuarios");
+      serv.Get({
+        action: "/CerrarSesion",
+        Resolve: (res) => {
+          this.MostrarToken();
+        },
+      });
+    },
+    MostrarToken() {
+      const vm = this;
       this.$axios
-        .get('Usuarios/ConsultaToken')
+        .get("Usuarios/ConsultaToken")
         .then((res) => {
-          console.log(res)
           if (res.data.idacceso > 0) {
-            vm.$store.commit('user/updateLogueado', res.data)
-            vm.usuario = res.data
-            this.listFormularios = paths// .filter(el => el.rolsWithPermision.includes(this.usuario.usuario.rol))
-
-            this.RedirectFromUserPermision()
+            //vm.$store.commit('user/updateLogueado', res.data)
+            vm.usuario = res.data;
+            this.listFormularios = paths; // .filter(el => el.rolsWithPermision.includes(this.usuario.usuario.rol))
+            //this.RedirectFromUserPermision()
           } else {
-            vm.$store.commit('user/updateLogueado', null)
-            // window.location.href = '/Login'
+            //vm.$store.commit('user/updateLogueado', null)
+            this.$router.push({ path: "/Login" });
           }
         })
         .catch((e) => {
-          // window.location.href = '/Login'
-          console.log('mensaje de error' + e.response.message)
-          if (e.message === 'Network Error') {
-            console.log('No hay wifi')
+          this.$router.push({ path: "/Login" });
+          console.log("mensaje de error" + e);
+          if (e.message === "Network Error") {
+            console.log("No hay wifi");
           }
-        })
+        });
     },
-    SelectRouteFromUrl () {
-      const path = this.$route.fullPath.toLowerCase()
-      let hijo = ''
-      const parent = paths.find(objeto => {
+    SelectRouteFromUrl() {
+      const path = this.$route.fullPath.toLowerCase();
+      let hijo = "";
+      const parent = paths.find((objeto) => {
         // Buscamos el valor dentro del arreglo hijo de cada objeto
-        hijo = objeto.children.find(item => item.to.toLowerCase() === path)
-        return objeto.children.some(item => item.to.toLowerCase() === path)
-      })
-      this.linkActivo = parent.linkActivo
-      this.linkSubMenu = hijo.linkSubMenu
+        hijo = objeto.children.find((item) => item.to.toLowerCase() === path);
+        return objeto.children.some((item) => item.to.toLowerCase() === path);
+      });
+
+      this.linkActivo = parent.linkActivo;
+      this.linkSubMenu = hijo.linkSubMenu;
     },
-    RedirectFromUserPermision () {
-      const ruta = this.$route.fullPath
-      const ExisteRuta = this.listFormularios.find(el => el.children.some(rt => rt.to.toLowerCase() === ruta.toLowerCase()))
-      console.log(this.listFormularios)
+    RedirectFromUserPermision() {
+      const ruta = this.$route.fullPath;
+      const ExisteRuta = this.listFormularios.find((el) =>
+        el.children.some((rt) => rt.to.toLowerCase() === ruta.toLowerCase())
+      );
       if (ExisteRuta === undefined && this.listFormularios.length > 0) {
-        this.$router.push({ path: this.listFormularios[0].children[0].to })
+        this.$router.push({ path: this.listFormularios[0].children[0].to });
       }
     },
-    Navegacion () {
-      window.push = '' + this.btnToggle
-    }
-  }
-}
+    Navegacion() {
+      window.push = "" + this.btnToggle;
+    },
+    obtenerDataBase() {
+      this.$axios
+        .get("Rutas")
+        .then((res) => {
+          var rutaStore = useRutasStore();
+          rutaStore.listaRutas = res.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+};
 </script>
 <style scoped>
 .my-menu-link {

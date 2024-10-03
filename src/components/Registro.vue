@@ -76,7 +76,7 @@
 <script>
 
 export default {
-  name: 'Registro',
+  name: 'RegistroComponent',
   props: {
     labelbtn: {
       type: String,

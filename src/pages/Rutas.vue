@@ -14,7 +14,7 @@
     <q-table
       bordered
       title="RUTAS"
-      :data="dataRutas"
+      :rows="dataRutas"
       :columns="columns"
       dense
       class="q-mx-md"
@@ -138,7 +138,7 @@
 
 <script>
 export default {
-  name: 'Camionetas',
+  name: 'RutasPage',
   data () {
     return {
       modalregistro: false,

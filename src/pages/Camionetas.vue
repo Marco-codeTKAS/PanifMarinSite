@@ -14,25 +14,7 @@
         class="q-my-sm q-mx-lg q-px-sm"
       ></q-btn>
     </div>
-    <q-card class="">
-      <q-table
-        title="Camionetas"
-        bordered
-        @row-click="Seleccion"
-        :columns="columns"
-        :data="dataCamionetas"
-      >
-      <template v-slot:body-cell-actions="props">
-        <q-td :props="props">
-          <div class="row align-center">
-            <q-btn icon="construction" flat color="secondary" round @click="LeaveToReparaciones(props.row)"></q-btn>
-            <!-- <q-btn icon="edit" color="primary" flat round @click.stop="Seleccion('',props.row)"></q-btn>
-            <q-btn icon="delete" color="negative" flat round @click.stop="Eliminar"></q-btn> -->
-          </div>
-        </q-td>
-      </template>
-      </q-table>
-    </q-card>
+
 
     <q-dialog v-model="modalregistro">
       <q-card class="q-px-md q-pb-md" style="width: 800px; max-width: 80vw">
@@ -186,7 +168,7 @@
 
 <script>
 export default {
-  name: 'Camionetas',
+  name: 'CamionetasPage',
   data () {
     return {
       dataCamionetas: [],

@@ -1,11 +1,9 @@
 <template>
   <q-page class="flex justify-center">
-    <div class="row q-px-sm q-pt-sm justify-center fit">
-      <q-card
-        class="my-card row col-lg-6 col-md-8 col-12 items-end q-my-md q-px-md q-pt-xs"
-      >
+    <div class="row q-pa-sm justify-center fit">
+      <q-card class="my-card row col-lg-6 col-md-8 col-12  items-end q-my-md q-px-md q-pt-xs">
         <!-- Listado panes -->
-        <h6 class="q-my-sm">Recepción de pan</h6>
+        <h6 class="q-my-sm">Carga diaria de pan</h6>
         <q-select
           :options="rutaStore.listaRutas"
           filled
@@ -20,41 +18,46 @@
         <q-table
           :columns="columns"
           :rows="listaPresentacionPanes"
-          title="Registro Diario de pan"
           table-header-class="bg-secondary text-white"
           hide-bottom
           :pagination="{ rowsPerPage: 0 }"
-          class="q-pb-md my-sticky-header-table col-12"
+          class="q-py-sm my-sticky-header-table col-12"
           square
           v-show="registroDiario.ruta !== null"
         >
           <template v-slot:body-cell="props">
             <q-td :props="props">
-              <p class="q-ma-none" v-if="props.col.name === 'nombre'">
+              <h6
+                class="text-subtitle2 q-ma-none"
+                v-if="props.col.name === 'nombre'"
+              >
                 {{ props.row.nombre }}
+              </h6>
+              <p
+                class="q-ma-none"
+                v-else-if="props.col.name === 'enExistencia'"
+              >
+                {{ props.row.enExistencia }}
               </p>
               <q-input
                 v-else
                 v-model.number="props.row[props.col.name]"
                 input-class="text-right"
                 type="number"
-                class="q-py-sm"
                 :label="props.col.label"
                 filled
                 dense
+                borderless
               />
             </q-td>
           </template>
         </q-table>
         <div class="row col-12 q-pb-md justify-end">
           <div class="row col q-px-md">
-            <span class="text-subtitle2">
-              Total {{ registroDiario.total }}
-            </span>
+            <span class="text-subtitle2"> Total {{ total }} </span>
           </div>
           <q-btn
             label="Guardar"
-            class="q-mt-xs"
             color="primary"
             @click="GuardarRegistro"
           ></q-btn>
@@ -70,25 +73,28 @@ import { useRutasStore } from "src/stores/example-store";
 import { useService } from "src/Utils/Servicio";
 
 export default {
-  name: "RecepcionPan",
+  name: "SalidasdePan",
   mixins: [RepartidoresMixinVue],
   data() {
-    return { 
+    return {
       registroDiario: {
         totalSalida: 0,
         ruta: null,
         listaPresentacionPanes: [],
-        idSalidaRel:0,
       },
       rutaStore: useRutasStore(),
       columns: [
         { name: "nombre", label: "NOMBRE", field: "nombre" },
-        // { name: "cargaDia", label: "CARGA DIA", field: "cargaDia",align:'center' },
-        { name: "merma", label: "MERMA", field: "merma", align: "center" },
         {
-          name: "pzBuenas",
-          label: "PZ BUENAS",
-          field: "pzBuenas",
+          name: "cargaDia",
+          label: "CARGA DIA",
+          field: "cargaDia",
+          align: "center",
+        },
+        {
+          name: "enExistencia",
+          label: "EXISTENCIA",
+          field: "enExistencia",
           align: "center",
         },
       ],
@@ -111,22 +117,11 @@ export default {
         { id: 3, label: "Merma" },
         { id: 4, label: "PZ Buenas" },
       ],
-      RecepcionService: useService("Recepcion"),
+      SalidaService: useService("Salidas"),
     };
   },
-  created() {
-    console.log(this.dataRepartidores);
-  },
+  created() {},
   methods: {
-    HandleRutaSelected() {
-      this.RecepcionService.GetById({
-        id: this.registroDiario.ruta.idRuta,
-        Resolve: (res) => {
-          this.listaPresentacionPanes = res.data;
-          this.registroDiario.idSalidaRel = res.data[0]?.idSalidaRel
-        },
-      });
-    },
     GuardarRegistro() {
       this.registroDiario.totalSalida = this.total;
       if (this.registroDiario.ruta === null) {
@@ -134,37 +129,34 @@ export default {
           message: "Selecciona una ruta para Guardar",
           type: "negative",
         });
-        return;
+        return
       }
-      if (!this.ValidaCantidades()) {
-        return;
-      }
-
       this.registroDiario.listaPresentacionPanes = this.listaPresentacionPanes;
-      this.RecepcionService.Post({
+      this.SalidaService.Post({
         obj: this.registroDiario,
         Resolve: (res) => {
           console.log(res.data);
         },
       });
     },
-    ValidaCantidades() {
-      for (const pan of this.listaPresentacionPanes) {
-        if (pan.merma > pan.cargaDia || pan.pzBuenas > pan.cargaDia) {
-          this.$q.notify({
-            message: `Estas intentando devolver mas ${pan.nombre} del que se llevaron`,
-            type: "negative",
-          });
-          return false;
-        }
-        if (pan.merma < 0 || pan.pzBuenas <0)  {
-          this.$q.notify({
-            message: `No puedes ingresarle números negativos a ${pan.nombre} intenta de nuevo`,
-            type: "negative",
-          });
-        }
-      }
-      return true;
+    HandleRutaSelected() {
+      this.SalidaService.GetById({
+        id: this.registroDiario.ruta.idRuta,
+        Resolve: (res) => {
+          this.listaPresentacionPanes = res.data;
+        },
+      });
+    },
+  },
+  computed: {
+    total() {
+      let total = 0;
+      this.listaPresentacionPanes.forEach((element) => {
+        element.cargaDia ?? 0;
+        const cant = element.enExistencia + element.cargaDia;
+        total = total + cant * element.precio;
+      });
+      return total;
     },
   },
 };

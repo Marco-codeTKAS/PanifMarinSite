@@ -1,11 +1,9 @@
 <template>
-  <div id="q-app">
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
-<script>
-export default {
+<script setup>
+defineOptions({
   name: 'App'
-}
+});
 </script>

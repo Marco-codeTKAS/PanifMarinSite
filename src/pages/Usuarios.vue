@@ -12,7 +12,7 @@
             dense
             class="q-mx-md "
             row-key="indice"
-            :pagination.sync="paginationedit"
+            v-model:pagination="paginationedit"
             :loading="loadingtable"
             >
               <template v-slot:body-cell-rol="props">
@@ -59,7 +59,7 @@
 <script>
 import Registro from 'components/Registro.vue'
 export default {
-
+  name:'UsuariosPage',
   components: {
     Registro
   },

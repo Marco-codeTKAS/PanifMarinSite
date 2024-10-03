@@ -3,11 +3,7 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('pages/Index.vue')
-      },
+    children: [      
       {
         path: '/Repartidores',
         component: () => import('pages/Repartidores.vue')
@@ -37,21 +33,30 @@ const routes = [
         component: () => import('src/pages/RecepciondePan.vue')
       },
       {
-        path: '/ROverview',
-        component: () => import('src/pages/RepartidorOverview.vue')
-      }
+        path: '/Salidas',
+        component: () => import('src/pages/SalidaPan.vue')
+      },
+      {
+        path: '/PagoComision',
+        component: () => import('src/pages/PagoDia.vue')
+      },
+      {
+        path: '/Home',
+        component: () => import('pages/Index.vue')
+      },
     ]
   },
+  
   {
-    path: '/Home',
+    path: '/Login',
     component: () => import('pages/Home.vue')
   },
 
   // Always leave this as last one,
   // but you can also remove it
   {
-    path: '*',
-    component: () => import('pages/Error404.vue')
+    path: '/:catchAll(.*)*',
+    component: () => import('pages/ErrorNotFound.vue')
   }
 ]
 

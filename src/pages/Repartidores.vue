@@ -77,6 +77,7 @@
 <script>
 import RepartidoresMixin from 'src/mixins/RepartidoresMixin.vue'
 export default {
+  name:'RepartidoresPage',
   mixins: [RepartidoresMixin],
   data () {
     return {
