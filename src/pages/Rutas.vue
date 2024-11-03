@@ -1,54 +1,56 @@
 <template>
-  <q-page>
-    <div class="row justify-end">
-      <q-btn
+  <q-page class="row justify-center items-start">
+    <div class="row col-12 col-md-10 col-lg-8">
+      <div class="row col-12 justify-end">
+        <q-btn
+          dense
+          icon="person_add"
+          color="primary"
+          align="right"
+          @click="modalregistro = true"
+          class="q-my-sm q-mx-lg q-px-sm"
+        ></q-btn>
+      </div>
+  
+      <q-table
+        bordered
+        title="RUTAS"
+        :rows="dataRutas"
+        :columns="columns"
         dense
-        icon="person_add"
-        color="primary"
-        align="right"
-        @click="modalregistro = true"
-        class="q-my-sm q-mx-lg q-px-sm"
-      ></q-btn>
+        class="q-mx-md col-12"
+        row-key="indice"
+        :loading="loadingtable"
+      >
+        <template v-slot:body-cell-Eliminar="props">
+          <q-td :props="props">
+            <q-btn
+              icon="clear"
+              flat
+              size="sm"
+              dense
+              color="negative"
+              @click="Eliminar(props.row.idUsuario)"
+            >
+            </q-btn>
+          </q-td>
+        </template>
+  
+        <template v-slot:body-cell-Editar="props">
+          <q-td :props="props">
+            <q-btn
+              icon="edit"
+              flat
+              size="sm"
+              dense
+              color="indigo"
+              @click="Seleccion(props.row.idUsuario)"
+            >
+            </q-btn>
+          </q-td>
+        </template>
+      </q-table>
     </div>
-
-    <q-table
-      bordered
-      title="RUTAS"
-      :rows="dataRutas"
-      :columns="columns"
-      dense
-      class="q-mx-md"
-      row-key="indice"
-      :loading="loadingtable"
-    >
-      <template v-slot:body-cell-Eliminar="props">
-        <q-td :props="props">
-          <q-btn
-            icon="clear"
-            flat
-            size="sm"
-            dense
-            color="negative"
-            @click="Eliminar(props.row.idUsuario)"
-          >
-          </q-btn>
-        </q-td>
-      </template>
-
-      <template v-slot:body-cell-Editar="props">
-        <q-td :props="props">
-          <q-btn
-            icon="edit"
-            flat
-            size="sm"
-            dense
-            color="indigo"
-            @click="Seleccion(props.row.idUsuario)"
-          >
-          </q-btn>
-        </q-td>
-      </template>
-    </q-table>
 
     <q-dialog v-model="modalregistro">
       <q-card>

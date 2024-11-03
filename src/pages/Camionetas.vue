@@ -1,20 +1,32 @@
 <template>
-  <q-page class="q-px-md">
-    <div class="row justify-end">
-      <q-btn
-        dense
-        icon="person_add"
-        color="primary"
-        align="right"
-        @click="
-          (Registro) => {
-            this.modalregistro = true;
-          }
-        "
-        class="q-my-sm q-mx-lg q-px-sm"
-      ></q-btn>
-    </div>
-
+  <q-page class="row q-px-md justify-center">
+    <main
+      class="row col-12 col-md-10 col-lg-8 items-start justify-end"
+      style="height: fit-content"
+    >
+      <div class="row col-12 justify-end">
+        <q-btn
+          dense
+          icon="person_add"
+          color="primary"
+          align="right"
+          @click="
+            (Registro) => {
+              this.modalregistro = true;
+            }
+          "
+          class="q-my-sm q-mx-lg q-px-sm"
+        ></q-btn>
+      </div>
+      <div class="row col-12">
+        <q-table
+          class="col-12"
+          title="Camionetas"
+          :rows="dataCamionetas"
+          :columns="columns"
+        ></q-table>
+      </div>
+    </main>
 
     <q-dialog v-model="modalregistro">
       <q-card class="q-px-md q-pb-md" style="width: 800px; max-width: 80vw">
@@ -31,7 +43,7 @@
               outlined
               fill-mask
               hide-bottom-space
-              :rules="[val => !!val || 'El campo es requerido']"
+              :rules="[(val) => !!val || 'El campo es requerido']"
               dense
               label="Marca *"
             >
@@ -45,7 +57,7 @@
               autofocus
               outlined
               hide-bottom-space
-              :rules="[val => !!val || 'El campo es requerido']"
+              :rules="[(val) => !!val || 'El campo es requerido']"
               dense
               label="Modelo *"
             >
@@ -62,7 +74,7 @@
               outlined
               dense
               hide-bottom-space
-              :rules="[val => !!val || 'El campo es requerido']"
+              :rules="[(val) => !!val || 'El campo es requerido']"
               label="VIN *"
             >
               <template v-slot:prepend>
@@ -76,7 +88,7 @@
               outlined
               dense
               hide-bottom-space
-              :rules="[val => !!val || 'El campo es requerido']"
+              :rules="[(val) => !!val || 'El campo es requerido']"
               label="Placas *"
             >
               <template v-slot:prepend>
@@ -88,7 +100,7 @@
               class="col-md col-12"
               autofocus
               hide-bottom-space
-              :rules="[val => !!val || 'El campo es requerido']"
+              :rules="[(val) => !!val || 'El campo es requerido']"
               outlined
               dense
               label="Año de lanzamiento *"
@@ -100,7 +112,14 @@
                     transition-show="scale"
                     transition-hide="scale"
                   >
-                    <q-date v-model="lanzamiento" default-view="Years" mask="YYYY" years-in-month-view emit-immediately minimal>
+                    <q-date
+                      v-model="lanzamiento"
+                      default-view="Years"
+                      mask="YYYY"
+                      years-in-month-view
+                      emit-immediately
+                      minimal
+                    >
                       <div class="row items-center justify-end">
                         <q-btn
                           v-close-popup
@@ -132,8 +151,8 @@
               v-model="tipoCamioneta"
               class="col-md-3 col-12"
               :options="[
-                {label:'Panadera', id:1},
-                {label:'Particular', id:2}
+                { label: 'Panadera', id: 1 },
+                { label: 'Particular', id: 2 },
               ]"
               autofocus
               outlined
@@ -168,104 +187,102 @@
 
 <script>
 export default {
-  name: 'CamionetasPage',
-  data () {
+  name: "CamionetasPage",
+  data() {
     return {
       dataCamionetas: [],
       modalregistro: false,
-      modelo: '',
-      marca: '',
-      KmPorLitro: '',
-      capacidadCarga: '',
-      tipoCamioneta: '',
-      lanzamiento: '',
-      VIN: '',
-      placas: '',
+      modelo: "",
+      marca: "",
+      KmPorLitro: "",
+      capacidadCarga: "",
+      tipoCamioneta: "",
+      lanzamiento: "",
+      VIN: "",
+      placas: "",
       loadingtable: false,
       columns: [
         {
-          name: 'marca',
-          align: 'left',
-          label: 'Marca',
-          field: 'marca',
-          sortable: true
+          name: "marca",
+          align: "left",
+          label: "Marca",
+          field: "marca",
+          sortable: true,
         },
         {
-          name: 'modelo',
+          name: "modelo",
           required: true,
-          label: 'Modelo',
-          field: 'modelo',
-          align: 'left',
-          sortable: true
+          label: "Modelo",
+          field: "modelo",
+          align: "left",
+          sortable: true,
         },
         {
-          name: 'VIN',
+          name: "VIN",
           required: true,
-          label: 'VIN',
-          field: 'vin',
-          align: 'left',
-          sortable: true
+          label: "VIN",
+          field: "vin",
+          align: "left",
+          sortable: true,
         },
         {
-          name: 'placas',
+          name: "placas",
           required: true,
-          label: 'Placas',
-          field: 'placas',
-          align: 'left',
-          sortable: true
+          label: "Placas",
+          field: "placas",
+          align: "left",
+          sortable: true,
         },
         {
-          name: 'kmporlitro',
-          align: 'center',
-          label: 'Kilometros por litro',
-          field: 'kmPorLitro'
+          name: "kmporlitro",
+          align: "center",
+          label: "Kilometros por litro",
+          field: "kmPorLitro",
         },
         {
-          name: 'capacidadCarga',
-          align: 'center',
-          label: 'Capacidad de carga',
-          field: 'capacidadCarga'
+          name: "capacidadCarga",
+          align: "center",
+          label: "Capacidad de carga",
+          field: "capacidadCarga",
         },
-        { name: 'actions', align: 'center', label: '', field: '' }
-      ]
-    }
+        { name: "actions", align: "center", label: "", field: "" },
+      ],
+    };
   },
-  created () {
-    this.ObtenerCamioneta()
+  created() {
+    this.ObtenerCamioneta();
   },
   methods: {
-    GuardarCamioneta (evt) {
-      const json = this.CrearObjToSend()
+    GuardarCamioneta(evt) {
+      const json = this.CrearObjToSend();
       this.$axios
-        .post('Camionetas', json)
+        .post("Camionetas", json)
         .then((res) => {
           if (res.data) {
-            this.ObtenerCamioneta()
-            this.modalregistro = false
+            this.ObtenerCamioneta();
+            this.modalregistro = false;
           }
-        }).finally(() => {
-
         })
+        .finally(() => {});
     },
-    LeaveToReparaciones (row) {
-      console.log(row.idCamioneta)
-      this.$router.push({ path: '/reparaciones/' + row.idCamioneta })
+    LeaveToReparaciones(row) {
+      this.$router.push({ path: "/reparaciones/" + row.idCamioneta });
     },
-    ObtenerCamioneta () {
-      this.loadingtable = true
+    ObtenerCamioneta() {
+      this.loadingtable = true;
       this.$axios
-        .get('Camionetas')
+        .get("Camionetas")
         .then((res) => {
-          this.dataCamionetas = res.data
-          this.loadingtable = false
+          this.dataCamionetas = res.data;
+          this.loadingtable = false;
         })
         .finally(() => {
-          this.loadingtable = false
-        })
+          this.loadingtable = false;
+        });
     },
-    Eliminar (idCamioneta) {},
-    CrearObjToSend () {
-      const vm = this
+    Eliminar(idCamioneta) {},
+    CrearObjToSend() {
+      const vm = this;
       const obj = {
         marca: vm.marca,
         modelo: vm.modelo,
@@ -274,23 +291,23 @@ export default {
         lanzamiento: vm.lanzamiento,
         kmPorLitro: vm.kmPorLitro,
         tipoCamioneta: vm.tipoCamioneta.id,
-        capacidadCarga: vm.capacidadCarga
-      }
-      return obj
+        capacidadCarga: vm.capacidadCarga,
+      };
+      return obj;
     },
-    LimpiarData () {
-      this.marca = ''
-      this.modelo = ''
-      this.VIN = ''
-      this.placas = ''
-      this.lanzamiento = ''
-      this.KmPorLitro = ''
-      this.tipoCamioneta = ''
-      this.capacidadCarga = ''
+    LimpiarData() {
+      this.marca = "";
+      this.modelo = "";
+      this.VIN = "";
+      this.placas = "";
+      this.lanzamiento = "";
+      this.KmPorLitro = "";
+      this.tipoCamioneta = "";
+      this.capacidadCarga = "";
     },
-    Seleccion (evt, row) {
-      console.log(row)
-    }
-  }
-}
+    Seleccion(evt, row) {
+      console.log(row);
+    },
+  },
+};
 </script>

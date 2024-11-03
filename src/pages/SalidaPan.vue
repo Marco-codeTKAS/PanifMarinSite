@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex justify-center">
     <div class="row q-pa-sm justify-center fit">
-      <q-card class="my-card row col-lg-6 col-md-8 col-12  items-end q-my-md q-px-md q-pt-xs">
+      <q-card class="my-card row col-lg-6 col-md-8 col-12  items-end q-my-md q-px-md q-pt-xs" >
         <!-- Listado panes -->
         <h6 class="q-my-sm">Carga diaria de pan</h6>
         <q-select
@@ -52,6 +52,15 @@
             </q-td>
           </template>
         </q-table>
+        <div
+          class="row col-12 text-center justify-center items-start" style="margin-bottom: 40vh;"          
+          v-show="registroDiario.ruta === null" 
+        >
+          <h6 class="text-center">Selecciona una ruta para continuar</h6>
+          <div class="row col-12 justify-center ">
+            <q-img src="~assets/LogoColima.png" alt="" style="width: 400px;" />
+          </div>
+        </div>
         <div class="row col-12 q-pb-md justify-end">
           <div class="row col q-px-md">
             <span class="text-subtitle2"> Total {{ total }} </span>
@@ -99,16 +108,7 @@ export default {
         },
       ],
       listaPresentacionPanes: [
-        {
-          idPan: 1,
-          nombre: "Pan Dulce",
-          idTipo: 1,
-          precio: 9,
-          enExistencia: 0,
-          cargaDia: 0,
-          merma: 0,
-          pzBuenas: 0,
-        },
+
       ],
       listaConceptosEntrega: [
         { id: 0, label: "Nombre Pan" },
@@ -124,26 +124,46 @@ export default {
   methods: {
     GuardarRegistro() {
       this.registroDiario.totalSalida = this.total;
+      if( this.rutaStore.diaSemana === 7){
+        this.$q.notify({
+          message: "Los domingos no hay Carga de pan",
+          type: "negative",
+        });
+        return
+      }
       if (this.registroDiario.ruta === null) {
         this.$q.notify({
           message: "Selecciona una ruta para Guardar",
           type: "negative",
         });
         return
-      }
-      this.registroDiario.listaPresentacionPanes = this.listaPresentacionPanes;
+      } 
+      
+
+      this.registroDiario.listaPresentacionPanes = this.listaPresentacionPanes.map(el => ({...el, cargaDia: el.cargaDia === null ? 0 : el.cargaDia === '' ? 0 : el.cargaDia}));
       this.SalidaService.Post({
         obj: this.registroDiario,
         Resolve: (res) => {
-          console.log(res.data);
+          this.registroDiario.ruta = null;
         },
       });
     },
     HandleRutaSelected() {
+      if( this.rutaStore.diaSemana === 7){
+        this.$q.notify({
+          message: "Los domingos no hay Carga de pan",
+          type: "negative",
+        });
+        this.registroDiario.ruta = null
+        return
+      }
       this.SalidaService.GetById({
         id: this.registroDiario.ruta.idRuta,
         Resolve: (res) => {
-          this.listaPresentacionPanes = res.data;
+          this.listaPresentacionPanes = res.data.map(el => {
+            el.cargaDia = el.cargaDia === 0 ? null : el.cargaDia
+            return el
+          }); 
         },
       });
     },
@@ -152,7 +172,6 @@ export default {
     total() {
       let total = 0;
       this.listaPresentacionPanes.forEach((element) => {
-        element.cargaDia ?? 0;
         const cant = element.enExistencia + element.cargaDia;
         total = total + cant * element.precio;
       });

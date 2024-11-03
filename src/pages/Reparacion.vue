@@ -1,15 +1,19 @@
 <template>
-  <q-page class="q-px-lg">
-    <div class="row justify-end">
-      <q-btn dense icon="person_add" color="primary" align="right" @click="OpenModalReparacion"
-        class="q-my-sm q-mx-lg q-px-sm"></q-btn>
+  <q-page class="row justify-center items-start q-px-lg">
+    <div class="row col-12 col-md-10 col-lg-8">
+      <div class="row col-12 justify-end">
+        <q-btn dense icon="person_add" color="primary" align="right" @click="OpenModalReparacion"
+          class="q-my-sm q-mx-lg q-px-sm"></q-btn>
+      </div>
+      <div class="row col-12 q-mt-md">
+        <q-table :columns="columns" :rows="listaReparaciones" no-data-label="I didn't find anything for you"
+          title="Reparaciones" class="col-12">
+  
+        </q-table>
+      </div>
     </div>
-    <div class="row q-mt-md">
-      <q-table :columns="columns" :data="listaReparaciones" no-data-label="I didn't find anything for you"
-        title="Reparaciones" class="col-12">
 
-      </q-table>
-    </div>
+
     <q-dialog v-model="modalReparacion">
       <q-card class="q-mt-md col-12" style="width: 1000px; max-width: 80vw;" bordered>
         <!-- Header -->
@@ -183,7 +187,6 @@ export default {
         .then((res) => {
           this.listaCamionetas = res.data
           if (this.$route.params.idCamioneta !== undefined) {
-            vm.OpenModalReparacion()
             this.reparacion.camioneta = vm.listaCamionetas.find(el => el.idCamioneta === Number(this.$route.params.idCamioneta))
             console.log(vm.listaCamionetas)
           }

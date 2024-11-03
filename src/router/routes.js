@@ -33,15 +33,27 @@ const routes = [
         component: () => import('src/pages/RecepciondePan.vue')
       },
       {
+        path: '/ReporteRutasDiario',
+        component: () => import('src/pages/Reportes/ReporteRutasDiario.vue')
+      },
+      {
         path: '/Salidas',
         component: () => import('src/pages/SalidaPan.vue')
       },
       {
-        path: '/PagoComision',
+        path: '/Panes',
+        component: () => import('src/pages/PanesPage.vue')
+      },
+      {
+        path: '/PagoComision/:idRuta?',
         component: () => import('src/pages/PagoDia.vue')
       },
       {
         path: '/Home',
+        component: () => import('pages/Index.vue')
+      },
+      {
+        path: '',
         component: () => import('pages/Index.vue')
       },
     ]

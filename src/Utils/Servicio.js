@@ -6,12 +6,17 @@ import { Notify, Loading } from 'quasar'
 export function useService(url) {
   let listaData = ref([]);
 
-  const OnErrorUnHandled = (error)=> {
+  const OnErrorUnHandled = (error,Reject = null)=> {
     Loading.hide()
     if(error.code === 'ERR_NETWORK'){
       Notify.create({message:'Ocurrio un error de red al comunicarse con el servidor'})
     }
+    console.log(error.response?.data);
     Notify.create({message:error.response?.data?.errors[0].message, type:'negative'})
+
+    if (Reject !== null ) {
+      Reject()
+    }
   }
 
   const PreResolve = (response, Resolve,message,hideMessage) => {      
@@ -31,10 +36,9 @@ export function useService(url) {
   * @param {string} options.accion - (Opcional)Nnombre de la funcion que se va a mandar llamar en el controlador. Se debe llamar con una diagonal ej: /ObtenUsuariosEspecificos.  
   */
   function Get({Resolve,Reject=null,action=''}) {        
-    Loading.show();
-    const errorFunc = Reject ?? OnErrorUnHandled     
+    Loading.show();     
     const mensaje = ''
-    api.get(url + action).then(response => PreResolve(response,Resolve, mensaje),errorFunc)
+    api.get(url + action).then(response => PreResolve(response,Resolve, mensaje),error => OnErrorUnHandled(error ,Reject))
   }
 
    /**
@@ -44,13 +48,13 @@ export function useService(url) {
   * @param {Number}  options.id - Identificador unico necesario para realizar la peticion.  
   * @param {Function} options.Resolve - Funcion Calback que se ejecuta al obtener una respuesta correcta de la peticion. Retorna como parametro la respuesta de axios.
   * @param {Function} options.Reject -  Funcion Calback que se ejecyta al obtener un error en la respuesta de la peticion. Retorna como parametro un objeto Error.
-  * @param {string} options.accion - (Opcional)Nnombre de la funcion que se va a mandar llamar en el controlador. Se debe llamar con una diagonal ej: /ObtenUsuariosEspecificos.  
+  * @param {string} options.action - (Opcional)Nnombre de la funcion que se va a mandar llamar en el controlador. Se debe llamar con una diagonal ej: /ObtenUsuariosEspecificos.  
   */
   function GetById({id,Resolve,Reject=null,action =''}) {    
     Loading.show()
-      const errorFunc = Reject ?? OnErrorUnHandled     
+        
       const mensaje = ''
-      api.get(`${url}${action}/${id}`).then(response => PreResolve(response,Resolve,mensaje),errorFunc) ;      
+      api.get(`${url}${action}/${id}`).then(response => PreResolve(response,Resolve,mensaje),(error) => OnErrorUnHandled(error ,Reject)) ;      
   }
 
  /**
@@ -65,9 +69,8 @@ export function useService(url) {
   */
   async function Post({obj,Resolve,Reject=null, action='',hideMessage=false,}) {
     Loading.show()
-    const errorFunc = Reject ?? OnErrorUnHandled     
     const mensaje = 'Registro guardado Correctamente'
-    api.post(url+action, obj).then(response => PreResolve(response,Resolve,mensaje,hideMessage),errorFunc);
+    api.post(url+action, obj).then(response => PreResolve(response,Resolve,mensaje,hideMessage),(error) => OnErrorUnHandled(error ,Reject));
   }
    /**
   * Genera una peticion p al controlador especificado en su servicio se pueden agregar funciones secundarias pasando un action y actualiza los datos de la variable listaDta
@@ -80,9 +83,8 @@ export function useService(url) {
   */
   async function Put({obj,Resolve,Reject=null,action=''}) {
     Loading.show()
-    const errorFunc = Reject ?? OnErrorUnHandled  
     const mensaje = 'Registro actualizado Correctamente'
-    api.put(`${url}${action}`, obj).then(response => PreResolve(response,Resolve,mensaje),errorFunc);
+    api.put(`${url}${action}`, obj).then(response => PreResolve(response,Resolve,mensaje),(error) => OnErrorUnHandled(error ,Reject));
   }
 
   /**
@@ -98,7 +100,7 @@ export function useService(url) {
     Loading.show()
     const errorFunc = Reject ?? OnErrorUnHandled  
     const mensaje = 'Registro eliminado Correctamente'
-    api.delete(`${url}${action}/${id}`).then(response => PreResolve(response,Resolve,mensaje),errorFunc);      
+    api.delete(`${url}${action}/${id}`).then(response => PreResolve(response,Resolve,mensaje),(error) => OnErrorUnHandled(error ,Reject));      
   }
 
   return {

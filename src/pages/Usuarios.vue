@@ -1,145 +1,200 @@
 <template>
-    <main>
-
-        <section>
-            <div class="row justify-end">
-                <q-btn dense  icon="person_add"  color="secondary" align="right" @click="Registro=>{this.modalregistro = true}" class="q-my-sm q-mx-lg q-px-sm"></q-btn>
-            </div>
-            <q-table
-            title="USUARIOS"
-            :data="dataTable"
-            :columns="columns"
-            dense
-            class="q-mx-md "
-            row-key="indice"
-            v-model:pagination="paginationedit"
-            :loading="loadingtable"
+  <main class="row justify-center" >
+    <section class="col-12 col-md-10 col-lg-8" > 
+      <div class="row justify-end">
+        <q-btn
+          dense
+          icon="person_add"
+          color="secondary"
+          align="right"
+          @click="
+            (Registro) => {
+              this.modalregistro = true;
+            }
+          "
+          class="q-my-sm q-mx-lg q-px-sm"
+        ></q-btn>
+      </div>
+      <q-table
+        title="USUARIOS"
+        :rows="dataTable"
+        :columns="columns"
+        dense
+        class="q-mx-md"
+        row-key="indice"
+        v-model:pagination="paginationedit"
+        :loading="loadingtable"
+      >
+        <template v-slot:body-cell-rol="props">
+          <q-td :props="props">
+            <div class="row" v-if="props.row.rol === 1">Usuario</div>
+            <div class="row" v-if="props.row.rol === 2">Admin</div>
+          </q-td>
+        </template>
+        <template v-slot:body-cell-Eliminar="props">
+          <q-td :props="props">
+            <q-btn
+              icon="clear"
+              flat
+              size="xs"
+              color="negative"
+              @click="Eliminar(props.row.idUsuario)"
+              dense
             >
-              <template v-slot:body-cell-rol="props">
-                <q-td :props="props">
-                  <div class="row" v-if="props.row.rol===1">
-                    Usuario
-                  </div>
-                  <div class="row" v-if="props.row.rol===2">
-                    Admin
-                  </div>
-                </q-td>
-              </template>
-              <template v-slot:body-cell-Eliminar="props">
-                <q-td :props="props">
-                  <q-btn icon="clear" flat size="xs"  color="negative" @click="Eliminar(props.row.idUsuario)" dense > </q-btn>
-                </q-td>
+            </q-btn>
+          </q-td>
+        </template>
 
-              </template>
+        <template v-slot:body-cell-Editar="props">
+          <q-td :props="props">
+            <q-btn
+              icon="edit"
+              flat
+              size="xs"
+              color="indigo"
+              dense
+              @click="Seleccion(props.row.idUsuario)"
+            >
+            </q-btn>
+          </q-td>
+        </template>
+      </q-table>
+      <q-dialog v-model="modalregistro" persistent>
+        <Registro />
+      </q-dialog>
+    </section>
 
-              <template v-slot:body-cell-Editar="props">
-                <q-td :props="props">
-                  <q-btn icon="edit" flat size="xs" color="indigo" dense @click="Seleccion(props.row.idUsuario)" > </q-btn>
-                </q-td>
-
-              </template>
-            </q-table>
-            <q-dialog v-model="modalregistro" persistent>
-                <Registro  />
-            </q-dialog>
-        </section>
-
-        <q-dialog v-model="mensaje" persistent transition-show="scale" transition-hide="scale">
-          <q-card>
-            <q-card-section>
-              <Registro labelbtn="Editar" disableEmail tituloComponent="Editar Usuario" hiddencontrasena="hidden" MethodName="Editar" :Datausuario="this.dataUsuario" />
-            </q-card-section>
-          </q-card>
-
-        </q-dialog>
-
-    </main>
+    <q-dialog
+      v-model="mensaje"
+      persistent
+      transition-show="scale"
+      transition-hide="scale"
+    >
+      <q-card>
+        <q-card-section>
+          <Registro
+            labelbtn="Editar"
+            disableEmail
+            tituloComponent="Editar Usuario"
+            hiddencontrasena="hidden"
+            MethodName="Editar"
+            :Datausuario="this.dataUsuario"
+          />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+  </main>
 </template>
 
 <script>
-import Registro from 'components/Registro.vue'
+import Registro from "components/Registro.vue";
 export default {
-  name:'UsuariosPage',
+  name: "UsuariosPage",
   components: {
-    Registro
+    Registro,
   },
-  data () {
+  data() {
     return {
       modalregistro: false,
       dataTable: [],
       dataUsuario: [],
       columns: [
-        { name: 'Nombre', align: 'left', label: 'Nombre', field: 'nombre', sortable: true },
+        {
+          name: "Nombre",
+          align: "left",
+          label: "Nombre",
+          field: "nombre",
+          sortable: true,
+        },
         // { name: 'calories', align: 'center', label: '', field: '', sortable: true },
-        { name: 'email', required: true, label: 'E-Mail', field: 'usuario', align: 'left', sortable: true },
-        { name: 'rol', align: 'center', label: 'Perfil', field: 'rol', sortable: true },
+        {
+          name: "email",
+          required: true,
+          label: "E-Mail",
+          field: "usuario",
+          align: "left",
+          sortable: true,
+        },
+        {
+          name: "rol",
+          align: "center",
+          label: "Perfil",
+          field: "rol",
+          sortable: true,
+        },
 
-        { name: 'Editar', align: 'center', label: '', field: '' },
-        { name: 'Eliminar', align: 'center', label: '', field: '' }
+        { name: "Editar", align: "center", label: "", field: "" },
+        { name: "Eliminar", align: "center", label: "", field: "" },
       ],
-      nombre: '',
-      email: '',
-      contrasena: '',
-      perfil: '',
+      nombre: "",
+      email: "",
+      contrasena: "",
+      perfil: "",
       paginationedit: { rowsPerPage: 25 },
       mensaje: false,
-      loadingtable: true
-
-    }
+      loadingtable: true,
+    };
   },
-  created () {
-    this.ObtenerUsuarios()
-    this.$root.$on('obtener', this.ObtenerUsuarios)
+  created() {
+    this.ObtenerUsuarios();
   },
   methods: {
-    ObtenerUsuarios () {
-      this.$axios.get('Usuarios').then(res => {
-        this.dataTable = res.data
-        this.loadingtable = false
-      }).catch(e => {
-        if (e.response.status === 401) {
-          this.$q.dialog({
-            title: 'Sin Autorizacion',
-            message: 'Usted no esta autorizado por favor comuniquese con soporte',
-            persistent: true
-          }).onOk(() => {
-            this.$root.$emit('Cerrar')
-          })
-        }
-      })
-    },
-
-    Seleccion (id) {
-      const vm = this
-      this.$axios.get('Usuarios?idSelected=' + id).then(res => {
-        vm.dataUsuario = res.data
-        this.nombre = this.dataUsuario
-        this.mensaje = true
-      })
-    },
-    Eliminar (id) {
-      const vm = this
-      this.$q.dialog({
-        title: 'Eliminar',
-        message: '¿Desea eliminar al usuario?',
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        vm.$axios.delete('Usuarios?id=' + id).then(res => {
-          if (res.data) {
-            vm.$q.notify({
-              type: 'negative',
-              message: 'Usuario Eliminado',
-              timeout: 1600
-            })
-            this.ObtenerUsuarios()
-          }
+    ObtenerUsuarios() {
+      this.$axios
+        .get("Usuarios")
+        .then((res) => {
+          this.dataTable = res.data;
+          this.loadingtable = false;
         })
-      }).onCancel(() => {
-        console.log('>>>> Cancel')
-      })
-    }
-  }
+        .catch((e) => {
+          if (e.response.status === 401) {
+            this.$q
+              .dialog({
+                title: "Sin Autorizacion",
+                message:
+                  "Usted no esta autorizado por favor comuniquese con soporte",
+                persistent: true,
+              })
+              .onOk(() => {
+                this.$root.$emit("Cerrar");
+              });
+          }
+        });
+    },
 
-}
+    Seleccion(id) {
+      const vm = this;
+      this.$axios.get("Usuarios?idSelected=" + id).then((res) => {
+        vm.dataUsuario = res.data;
+        this.nombre = this.dataUsuario;
+        this.mensaje = true;
+      });
+    },
+    Eliminar(id) {
+      const vm = this;
+      this.$q
+        .dialog({
+          title: "Eliminar",
+          message: "¿Desea eliminar al usuario?",
+          cancel: true,
+          persistent: true,
+        })
+        .onOk(() => {
+          vm.$axios.delete("Usuarios?id=" + id).then((res) => {
+            if (res.data) {
+              vm.$q.notify({
+                type: "negative",
+                message: "Usuario Eliminado",
+                timeout: 1600,
+              });
+              this.ObtenerUsuarios();
+            }
+          });
+        })
+        .onCancel(() => {
+          console.log(">>>> Cancel");
+        });
+    },
+  },
+};
 </script>

@@ -6,10 +6,10 @@
       content-style="background:linear-gradient(90deg, rgba(46,40,173,1) 0%, rgba(13,85,147,1) 46%, rgba(124,204,210,1) 100%);"
       full-screen position="right" persistent rounded v-model="Login">
       <div v-show="$q.screen.gt.sm" class="q-mr-xl q-py-sm q-px-lg no-shadow" style="margin-right:200px;"><q-img
-          src="~assets/LogoFull.png" alt="" style="width:400px;  " /></div>
+          src="~assets/LogoColima.png" alt="" style="width:400px;  " /></div>
       <q-card class="column justify-around fit q-mx-md">
         <q-card-section class="row q-mx-md self-start">
-          <q-img contain src="~/assets/Logo.png" style="max-width:40px; max-height:40px;"></q-img>
+          <q-img contain src="~/assets/ICONOColima.png" style="max-width:40px; max-height:40px;"></q-img>
           <p class="text-h4 q-ma-none">Inicio de Sesion </p>
           <p class="text-h6 q-ma-none">Bienvenido al Sistema de Panificadora Marin</p>
           <!-- <p class="text-subtitle">¿No estas registrado?
@@ -66,7 +66,9 @@ export default {
     LoginVerify () {
       const vm = this
       this.$q.loading.show({
-        message: 'Iniciando sesión <span class="text-orange text-weight-bold">Espera...</span>'
+        html:true,
+        message: 'Iniciando sesión <span class="text-orange text-weight-bold">Espera...</span>',
+        
       })
       
       this.$api.post('Usuarios/Login', {
@@ -97,7 +99,11 @@ export default {
           }
         }
       }).catch(e => {
-        console.log(e.message)
+        this.$q.notify({
+            type: 'negative',
+            message: 'Credenciales incorrectas intenta de nuevo ',
+            timeout: 1800
+          })
       }).finally(() => {
         this.$q.loading.hide()
       })

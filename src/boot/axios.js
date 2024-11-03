@@ -9,7 +9,7 @@ import axios from 'axios'
 // for each client)
 //axios.defaults.baseURL = 'https://bsite.net/MarcoWeb/api/'
 // axios.defaults.baseURL = 'https://localhost:44345/api/'
-const api = axios.create({ baseURL: 'https://bsite.net/MarcoWeb/api/' })
+const api = axios.create({ baseURL: 'https://localhost:44345/api/' })
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
