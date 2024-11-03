@@ -331,7 +331,7 @@ export default {
     },
   },
   created() {
-    const hoy = new Date(2024, 10, 1);
+    const hoy = new Date();
 
     this.filtro.from = date.formatDate(hoy, "YYYY-MM-DD");
     this.filtro.to = date.formatDate(hoy, "YYYY-MM-DD");

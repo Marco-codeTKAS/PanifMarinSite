@@ -36,8 +36,8 @@ export const paths = [
     rolsWithPermision: [1,2, 4],
     icon: 'local_shipping',
     children: [
-      { name: 'Camionetas', linkSubMenu: 'Camionetas', rolsWithPermision: [1,2, 4], ref: 'itemCamionetas', to: '/Camionetas', icon: 'local_shipping' },
-      { name: 'Reparaciones', linkSubMenu: 'Reparaciones', rolsWithPermision: [1,2, 4], ref: 'itemReparaciones', to: '/Reparaciones', icon: 'key' }
+      { name: 'Camionetas', linkSubMenu: 'Camionetas', rolsWithPermision: [1, 4], ref: 'itemCamionetas', to: '/Camionetas', icon: 'local_shipping' },
+      { name: 'Reparaciones', linkSubMenu: 'Reparaciones', rolsWithPermision: [1, 4], ref: 'itemReparaciones', to: '/Reparaciones', icon: 'key' }
     ]
   },
   {
