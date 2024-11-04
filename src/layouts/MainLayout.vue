@@ -10,7 +10,7 @@
             fit="contain"
             style="width: 130px"
           />
-          <div class="row" v-if="$q.screen.height < 900">
+          <div class="row" v-show="$q.screen.lt.md">
             <q-btn
               v-if="$q.screen.lt.sm"
               flat
@@ -27,7 +27,7 @@
             dense
             padding
             class="q-py-md q-gutter-x-sm rounded-borders row"
-            v-else
+            v-show="$q.screen.gt.sm"
           >
             <q-item
               v-for="(item, index) in listFormularios"
