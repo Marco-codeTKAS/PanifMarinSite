@@ -14,9 +14,11 @@
           label="Selecciona Ruta"
           option-label="nombreRuta"
         ></q-select>
+
       </header>
 
       <div class="row col-12 column-gap" v-show="registroDiario.ruta !== null">
+        <!-- Tabla de panes -->
         <q-card
           class="my-card row col-md-6 col-12 items-end q-my-md q-px-md q-pt-xs"
         >
@@ -34,6 +36,12 @@
             square
             v-show="registroDiario.ruta !== null"
           >
+            <template v-slot:top>
+              <div class="row col-12 items-center">
+                <div class="col q-table__title">Registro Diario de pan</div>
+                <div :class="['col-2  q-table__title', $q.screen.lt.md ? 'text-subtitle2' : 'q-table__title' ]">{{ currency(total) }}</div>
+              </div>
+            </template>
             <template v-slot:body-cell="props">
               <q-td :props="props">
                 <p class="q-ma-none" v-if="props.col.name === 'nombre'">
@@ -54,9 +62,7 @@
           </q-table>
 
           <div class="row col-12 q-pb-md justify-end">
-            <div class="row col q-px-md">
-              <span class="text-subtitle2"> Total {{ currency(total) }} </span>
-            </div>
+
             <q-btn
               label="Continuar al pago"
               flat
@@ -73,8 +79,9 @@
             ></q-btn>
           </div>
         </q-card>
-        <q-card class="row col-12 col-md q-my-md q-px-md q-pt-xs items-start">
-          <div class="row col-12">
+        <!-- Card de Dinero y desgloce -->
+        <q-card class="row col-12 col-md q-my-md q-px-md q-pt-xs items-start" style="height: fit-content;">
+          <div :class="['row col-12',$q.screen.lt.md ? 'order-last q-pb-md': 'order-first']">
             <header class="row col-12" style="height: fit-content">
               <h6 class="col-12 text-h6 q-my-sm">Entrega de dinero</h6>
             </header>
@@ -110,16 +117,39 @@
                 >
                 </q-input>
               </div>
+              <!-- Faltantes y gastos -->
+              <div class="row col-12 column-gap q-mb-md">
+                  <q-input class="col-4 q-pa-xs" v-model.number="faltante" type="number" filled dense label="faltante"></q-input>
+                  <q-input class="col-4 q-pa-xs" filled v-model.number="gasto" type="number" dense label="Gasto"></q-input>
+                  <q-input class="col q-pa-xs" filled v-model.number="gasto" type="number" dense label="Abono"></q-input>
+              </div>  
               <div class="row col-12 justify-between items-center q-px-xs">
-                <p class="text-h5 text-bold q-pa-sm q-ma-none bg-grey-2">
-                  {{ currency(TotalIngresado) }}
-                </p>
+                <div class="row column-gap items-center" style="position: relative;">
+                  <p class="text-h5 text-bold q-pa-sm  bg-grey-2">{{ currency(TotalIngresado) }} </p>
+                  <p class="row text-subtitle1 items-start  q-pa-sm text-grey-7"><span>{{currency(DiferenciaTotales)}}</span></p>
+                </div>
+                
                 <q-btn
                   color="primary"
                   label="Guardar"
                   @click="SaveDinero"
                 ></q-btn>
               </div>
+            </div>
+          </div>
+          <div class="row col-12 q-py-md">
+            <p class="q-ma-none text-subtitle1 text-secondary text-bold q-py-sm">Desglose Comisiones</p>
+            <div class="row col-12">
+              <div class="col-4">Comision</div>
+              <div class="col-4">Devolución Total</div>
+              <div class="col-4">Diferencia</div>
+            </div>
+            <div class="row col-12">
+              <div class="col-4 text-subtitle2 "> 
+                {{ currency(Comision) }} 
+              </div>
+              <div class="col-4 text-subtitle2 ">{{ currency(devolucionTotal) }}</div>
+              <div :class="[' text-subtitle2 ', Diferencia < 0 ? 'text-red-5': 'text-green-5' ]" >{{ currency(Diferencia) }}</div>
             </div>
           </div>
         </q-card>
@@ -140,7 +170,6 @@
 </template>
 
 <script>
-import { date } from "quasar";
 import RepartidoresMixinVue from "src/mixins/RepartidoresMixin.vue";
 import { useRutasStore } from "src/stores/example-store";
 import { formatCurrency } from "src/Utils/commons";
@@ -171,6 +200,9 @@ export default {
         { value: 1, cantidad: null },
         { value: 0.5, cantidad: null },
       ],
+      faltante:0,
+      gasto:0,
+      abono:0,
       currency: formatCurrency,
       rutaStore: useRutasStore(),
       columns: [
@@ -181,6 +213,18 @@ export default {
           name: "pzBuenas",
           label: "PZ BUENAS",
           field: "pzBuenas",
+          align: "center",
+        },
+        {
+          name: "oxxo",
+          label: "OXXO ",
+          field: "oxxo",
+          align: "center",
+        },
+        {
+          name: "kiosko",
+          label: "KIOSKO",
+          field: "kiosko",
           align: "center",
         },
       ],
@@ -200,16 +244,41 @@ export default {
     total() {
       let total = 0;
       this.listaPresentacionPanes.forEach((element) => {
-        const cant = element.cargaDia - element.merma - element.pzBuenas;
+        const cant = element.cargaDia - element.merma - element.pzBuenas - Number(element.oxxo ?? 0) - Number(element.kiosko ?? 0);
         total = total + cant * element.precio;
       });
       return total;
     },
     TotalIngresado() {
-      return this.listadoBilletes.reduce((acumulador, billete) => {
+      const total = this.listadoBilletes.reduce((acumulador, billete) => {
         return acumulador + billete.value * billete.cantidad;
       }, 0);
+      return total + Number(this.faltante) + Number(this.gasto) + Number(this.abono)
     },
+    Diferencia(){
+      const res = (this.total * 0.05) - this.devolucionTotal 
+      return res
+    },
+    DiferenciaTotales(){
+      return this.total - this.TotalIngresado
+    },
+    devolucionTotal(){
+      let devTotal = 0;
+      this.listaPresentacionPanes.forEach((element) => {
+        const cant = element.merma;
+        devTotal = devTotal + (cant * element.precio);
+      });
+      return devTotal;
+    },
+    Comision(){
+      const res =
+        this.total >= 10800
+          ? this.total * 0.1
+          : this.total < 8999
+          ? this.total * 0.08
+          : this.total * 0.09;
+      return res;
+    }
   },
   methods: {
     HandleRutaSelected() {
@@ -220,6 +289,8 @@ export default {
             ...el,
             merma: el.merma === 0 ? null : el.merma,
             pzBuenas: el.pzBuenas === 0 ? null : el.pzBuenas,
+            oxxo: el.oxxo === 0 ? null : el.oxxo,
+            kiosko: el.kiosko === 0 ? null : el.kiosko
           }));
 
           this.registroDiario.idRecepcionRel = res.data[0].idRecepcionRel;
@@ -249,8 +320,10 @@ export default {
           merma: el.merma === null ? 0 : el.merma === "" ? 0 : el.merma,
           pzBuenas:
             el.pzBuenas === null ? 0 : el.pzBuenas === "" ? 0 : el.pzBuenas,
+          oxxo: Number(el.oxxo ?? 0),
+          kiosko:Number(el.kiosko ?? 0)
         }));
-
+        
       this.RecepcionService.Post({
         obj: this.registroDiario,
         Resolve: (res) => {
@@ -260,15 +333,8 @@ export default {
       });
     },
     ValidaCantidades() {
+
       for (const pan of this.listaPresentacionPanes) {
-        const sumaPiezas = pan.merma + pan.pzBuenas;
-        if (sumaPiezas > pan.cargaDia) {
-          this.$q.notify({
-            message: `Estas intentando devolver mas ${pan.nombre} del que se llevaron`,
-            type: "negative",
-          });
-          return false;
-        }
         if (pan.merma < 0 || pan.pzBuenas < 0) {
           this.$q.notify({
             message: `No puedes ingresarle números negativos a ${pan.nombre} intenta de nuevo`,
@@ -277,16 +343,11 @@ export default {
           return false;
         }
       }
+
+      
       return true;
     },
     SaveDinero() {
-      if (this.TotalIngresado < this.total) {
-        this.$q.notify({
-          message: "El total que ingresaste es menor, intenta de nuevo",
-          type: "negative",
-        });
-        return;
-      }
       if (this.registroDiario.idRecepcionRel === 0) {
         this.$q.notify({
           message: "Se debe ingresar primero los panes entregados",
@@ -294,14 +355,14 @@ export default {
         });
         return
       }
-      for (const element of this.listadoBilletes) {
-        if (element.cantidad < 0) {
-          this.$q.notify({
-            message: "No ingreses valores negativos",
-            type: "negative",
-          });
-          return;
-        }
+      if (this.TotalIngresado < this.total) {
+        this.$q.notify({message:'El monto ingresado es menor a lo que debe entregar la ruta ', type:'negative'        })
+        return
+      }
+      
+      if(this.DiferenciaTotales < 0 && this.faltante > 0 ){
+        this.$q.notify({message:'estas ingresando mucho faltante el monto supera a lo que la ruta debe entregar', type:'negative'        })
+        return
       }
 
       this.RecepcionService.Post({
@@ -309,7 +370,10 @@ export default {
         obj: {
           idRecepcion: this.registroDiario.idRecepcionRel,
           monto: this.TotalIngresado,
-          desgloce: this.listadoBilletes.map(el => ({...el, cantidad: el.cantidad === null ? 0 : el.cantidad})),
+          faltante:this.faltante,
+          gasto:this.gasto,
+          abono:this.abono,
+          desgloce: this.listadoBilletes.map(el => ({...el, cantidad: Number(el.cantidad ?? 0) })),
         },
         Resolve: (res) => {
           console.log(res.data.data);

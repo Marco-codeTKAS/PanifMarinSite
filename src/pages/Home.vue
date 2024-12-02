@@ -1,8 +1,6 @@
-
 <template>
   <div class="row">
-    <q-dialog square
-    backdrop-filter="blur(8px) saturate(200%)"
+    <q-dialog square backdrop-filter="blur(8px) saturate(200%)"
       content-style="background:linear-gradient(90deg, rgba(46,40,173,1) 0%, rgba(13,85,147,1) 46%, rgba(124,204,210,1) 100%);"
       full-screen position="right" persistent rounded v-model="Login">
       <div v-show="$q.screen.gt.sm" class="q-mr-xl q-py-sm q-px-lg no-shadow" style="margin-right:200px;"><q-img
@@ -23,7 +21,8 @@
                 <q-icon name="person" />
               </template>
             </q-input>
-            <q-input v-model="password" type="password" autofocus outlined dense label="Contraseña" hint="Ingresa tu contraseña">
+            <q-input v-model="password" type="password" autofocus outlined dense label="Contraseña"
+              hint="Ingresa tu contraseña">
               <template v-slot:prepend>
                 <q-icon name="key" />
               </template>
@@ -52,9 +51,12 @@
 </template>
 
 <script>
+import { useService } from 'src/Utils/Servicio';
+const Usuarios_SERVICE = useService('Usuarios')
+
 export default {
   name: 'LoginPage',
-  data () {
+  data() {
     return {
       Login: true,
       Usuario: '',
@@ -63,52 +65,47 @@ export default {
     }
   },
   methods: {
-    LoginVerify () {
+    LoginVerify() {
       const vm = this
       this.$q.loading.show({
-        html:true,
+        html: true,
         message: 'Iniciando sesión <span class="text-orange text-weight-bold">Espera...</span>',
-        
+
       })
-      
-      this.$api.post('Usuarios/Login', {
-        email: this.Usuario,
-        password: this.password
-      }).then(res => {
-        if (res.data) {
-          vm.$q.localStorage.set('Token', res.data.token)
-          vm.$q.localStorage.set('Rol', res.data.rol)
-          //vm.$store.commit('user/updateLogueado', res.data)
-          if (res.data.token !== null) {
-            vm.$axios.defaults.headers.common.token = res.data.token
-          }
-          if (res.data.total > 0) {
-            this.modalexceso = true
-          } else {
-            if (vm.recordar === 1) {
-              vm.$q.localStorage.set('email', vm.mail)
-              vm.$q.localStorage.set('password', vm.contrasena)
-            } else {
-              vm.$q.localStorage.remove('email')
-              vm.$q.localStorage.remove('password')
+      Usuarios_SERVICE.Post({
+        action: '/Login',
+        obj: {
+          email: this.Usuario,
+          password: this.password
+        },
+        Resolve: res => {
+          if (res.data) {
+            vm.$q.localStorage.set('Token', res.data.token)
+            vm.$q.localStorage.set('Rol', res.data.rol)
+            //vm.$store.commit('user/updateLogueado', res.data)
+            if (res.data.token !== null) {
+              vm.$axios.defaults.headers.common.token = res.data.token
             }
-            if (res.data.rol === 3) {
+            if (res.data.total > 0) {
+              this.modalexceso = true
+            } else {
+              if (vm.recordar === 1) {
+                vm.$q.localStorage.set('email', vm.mail)
+                vm.$q.localStorage.set('password', vm.contrasena)
+              } else {
+                vm.$q.localStorage.remove('email')
+                vm.$q.localStorage.remove('password')
+              }
+              if (res.data.rol === 3) {
+                this.$router.push('/Home')
+              }
               this.$router.push('/Home')
             }
-            this.$router.push('/Home')
           }
         }
-      }).catch(e => {
-        this.$q.notify({
-            type: 'negative',
-            message: 'Credenciales incorrectas intenta de nuevo ',
-            timeout: 1800
-          })
-      }).finally(() => {
-        this.$q.loading.hide()
       })
     },
-    CerrarSesionesActivas (token) {
+    CerrarSesionesActivas(token) {
       this.$axios.get('Usuarios/CerrarSesionesActivas').then(res => {
         if (res.data) {
           console.log(res.data)

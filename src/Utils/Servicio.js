@@ -9,10 +9,18 @@ export function useService(url) {
   const OnErrorUnHandled = (error,Reject = null)=> {
     Loading.hide()
     if(error.code === 'ERR_NETWORK'){
-      Notify.create({message:'Ocurrio un error de red al comunicarse con el servidor'})
+      Notify.create({message:'Ocurrio un error de red al comunicarse con el servidor', type:'negative'})
+      return
     }
-    console.log(error.response?.data);
-    Notify.create({message:error.response?.data?.errors[0].message, type:'negative'})
+      
+    if (error.response?.data?.errors) {
+      for (const element of error.response?.data?.errors) {
+        Notify.create({message:element.message, type:'negative'})
+      }
+    }
+    
+  
+
 
     if (Reject !== null ) {
       Reject()

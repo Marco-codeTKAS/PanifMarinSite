@@ -10,8 +10,9 @@ export const paths = [
     children: [
       { name: 'Carga', linkSubMenu: 'Salidas', rolsWithPermision: [2, 1,3], ref: 'itemSalidas', to: '/Salidas', icon: 'inventory' },
       { name: 'Recepcion', linkSubMenu: 'Recepcion', rolsWithPermision: [2, 1,3], ref: 'itemRecepcion', to: '/Recepcion', icon: 'assignment' },
+      { name: 'GastosGrales', linkSubMenu: 'GastosGrales', rolsWithPermision: [2,1,3], ref: 'itemGastosGrales', to: '/Gastos', icon: 'payment' },
       // { name: 'Recibo Dinero', linkSubMenu: 'Recibo', rolsWithPermision:[1], ref: 'itemRecibo', to: '/Recibo', icon: 'payment' },
-      // { name: 'Repartidores', linkSubMenu: 'Repartidores', rolsWithPermision: [2], ref: 'itemRepartidores', to: '/Repartidores', icon: 'local_shipping' },
+
       
     ]
   },

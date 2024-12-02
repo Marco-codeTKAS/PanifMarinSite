@@ -1,8 +1,5 @@
 <template>
-  <q-page
-    class="row q-pa-md items-start justify-center row-gap"
-    style="min-height: fit-content"
-  >
+  <q-page class="row q-pa-md items-start justify-center row-gap" style="min-height: fit-content">
     <div class="row row-gap col-12 col-md-10 col-lg-8">
       <header class="row col-12" style="height: fit-content">
         <q-card class="row col-12 q-pt-md q-px-md">
@@ -21,11 +18,7 @@
           Detalle de las rutas
         </p>
 
-        <q-card
-          class="row col-12 q-px-md q-pt-md q-pb-sm q-mb-sm"
-          v-for="(dia, index) in dataReporte"
-          :key="index"
-        >
+        <q-card class="row col-12 q-px-md q-pt-md q-pb-sm q-mb-sm" v-for="(dia, index) in dataReporte" :key="index">
           <div class="row col-12 items-center">
             <header class="col-12">
               <p class="q-ma-none q-pb-sm text-subtitle1 text-bold text-primary">
@@ -34,7 +27,7 @@
             </header>
             <div class="row col-12 justify-between">
               <!--Muestra de horarios -->
-              <div class="row col-4">
+              <div class="row col-2">
                 <p class="row col-12 q-ma-none q-pb-sm">
                   Salio a las<span class="text-subtitle2 col-12">{{
                     dia.salida.fechaRegistro
@@ -42,16 +35,13 @@
                 </p>
                 <p class="row col-12 q-ma-none">
                   Llego a las
-                  <span
-                    class="text-subtitle2 col-12"
-                    v-if="dia.recepcion.idRecepcion !== 0"
-                    >{{ dia.recepcion.fechaRegistro }}</span
-                  >
+                  <span class="text-subtitle2 col-12" v-if="dia.recepcion.idRecepcion !== 0">{{
+                    dia.recepcion.fechaRegistro }}</span>
                   <span class="text-subtitle2 col-12" v-else>Sin entrega</span>
                 </p>
               </div>
               <!-- Detalle de usuarios -->
-              <div class="col-4">
+              <div class="col">
                 <p class="row col-12 q-ma-none q-pb-sm">
                   Entrego<span class="text-subtitle2 col-12">{{
                     currency(dia.salida?.usuario.nombre)
@@ -59,43 +49,48 @@
                 </p>
                 <p class="row col-12 q-ma-none">
                   Recibió
-                  <span
-                    class="text-subtitle2 col-12"
-                    v-if="dia.recepcion.idRecepcion !== 0"
-                    >{{ dia.recepcion.usuario.nombre }}</span
-                  >
+                  <span class="text-subtitle2 col-12" v-if="dia.recepcion.idRecepcion !== 0">{{
+                    dia.recepcion.usuario.nombre }}</span>
                   <span class="text-subtitle2 col-12" v-else>Sin entrega</span>
                 </p>
               </div>
               <!-- Muestra de venta -->
-              <div class="row col-4">
-                <p class="row col-12 q-ma-none q-pb-sm">
-                  Se llevo<span class="text-subtitle2 col-12">{{
-                    currency(dia.salida?.totalSalida)
-                  }}</span>
-                </p>
-                <p class="row col-12 q-ma-none">
-                  Entrego
-                  <span
-                    class="text-subtitle2 col-12"
-                    v-if="dia.recepcion.idRecepcion !== 0"
-                    >{{ currency(dia.recepcion?.totalRecepcion) }}</span
-                  >
-                  <span class="text-subtitle2 col-12" v-else>Sin entrega</span>
-                </p>
+              <div class="row col-5">
+                <div class="col-2">
+                  <p class="row col-12 q-ma-none q-pb-sm">
+                    Se llevo<span class="text-subtitle2 col-12">{{
+                      currency(dia.salida?.totalSalida)
+                      }}</span>
+                  </p>
+                  <p class="row col-12 q-ma-none">
+                    Entrego
+                    <span class="text-subtitle2 col-12" v-if="dia.recepcion.idRecepcion !== 0">{{
+                      currency(dia.desgloce?.monto - dia.desgloce?.faltante - dia.desgloce.gasto) }}</span>
+                    <span class="text-subtitle2 col-12" v-else>Sin entrega</span>
+                  </p>
+                </div>
+                <div class="row col relative">
+
+                  <p class="row col-12 q-ma-none q-pb-sm">
+                    Faltante<span class="text-subtitle2 col-12">{{
+                      currency(dia.desgloce?.faltante)
+                      }}</span>
+                  </p>
+                  <p class="row col-12 q-ma-none">
+                    Gasto
+                    <span class="text-subtitle2 col-12" v-if="dia.recepcion.idRecepcion !== 0">{{
+                      currency(dia.desgloce.gasto) }}</span>
+                    <span class="text-subtitle2 col-12" v-else>Sin entrega</span>
+                  </p>
+                </div>
+
               </div>
             </div>
           </div>
           <footer class="row col-12 text-accent q-mt-sm">
             <div>
-              <q-btn
-                flat
-                color="secondary"
-                label="Detalles"
-                size="0.95em"
-                dense
-                @click="handleShowDetalle(dia)"
-              ></q-btn>
+              <q-btn flat color="secondary" label="Detalles" size="0.95em" dense
+                @click="handleShowDetalle(dia)"></q-btn>
             </div>
           </footer>
         </q-card>
@@ -110,21 +105,12 @@
           <q-card-section>
             <header class="row col-12 q-mb-xs">
               <row class="col-5 text-subtitle2 text-secondary">Tipo Pan</row>
-              <row class="col-3 text-center text-subtitle2 text-secondary"
-                >Carga dia</row
-              >
-              <row class="col-2 text-center text-subtitle2 text-secondary"
-                >Merma</row
-              >
-              <row class="col-2 text-center text-subtitle2 text-secondary"
-                >Bueno</row
-              >
+              <row class="col-3 text-center text-subtitle2 text-secondary">Carga dia</row>
+              <row class="col-2 text-center text-subtitle2 text-secondary">Merma</row>
+              <row class="col-2 text-center text-subtitle2 text-secondary">Bueno</row>
             </header>
-            <div
-              :class="[index % 2 === 0 ? 'bg-grey-2' : '', 'row col-12']"
-              v-for="(pan, index) in diaSelected.salida.listaPresentacionPanes"
-              :key="pan.idPan"
-            >
+            <div :class="[index % 2 === 0 ? 'bg-grey-2' : '', 'row col-12']"
+              v-for="(pan, index) in diaSelected.salida.listaPresentacionPanes" :key="pan.idPan">
               <div class="row col-5 q-pa-sm text-bold">{{ pan.nombre }}</div>
               <div class="row col-3 q-pa-sm justify-center">
                 {{ pan.cargaDia }}
@@ -326,7 +312,7 @@ export default {
   },
   computed: {
     TotalVenta() {
-      const res = this.dataReporte.map(el => el.recepcion.totalRecepcion).reduce((acum,act) => acum + act)
+      const res = this.dataReporte.map(el => el.desgloce.monto).reduce((acum, act) => acum + act,0)
       return res;
     },
   },
@@ -337,7 +323,7 @@ export default {
     this.filtro.to = date.formatDate(hoy, "YYYY-MM-DD");
     this.fechaConsulta = date.formatDate(hoy, "dddd DD MMMM YYYY");
     this.GetReporte();
-    
+
   },
   methods: {
     GetReporte() {

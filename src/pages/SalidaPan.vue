@@ -63,7 +63,7 @@
         </div>
         <div class="row col-12 q-pb-md justify-end">
           <div class="row col q-px-md">
-            <span class="text-subtitle2"> Total {{ total }} </span>
+            <span class="text-subtitle1"> Total {{ currency(total) }} </span>
           </div>
           <q-btn
             label="Guardar"
@@ -79,6 +79,7 @@
 <script>
 import RepartidoresMixinVue from "src/mixins/RepartidoresMixin.vue";
 import { useRutasStore } from "src/stores/example-store";
+import { formatCurrency } from "src/Utils/commons";
 import { useService } from "src/Utils/Servicio";
 
 export default {
@@ -86,17 +87,24 @@ export default {
   mixins: [RepartidoresMixinVue],
   data() {
     return {
+      currency:formatCurrency,
       registroDiario: {
         totalSalida: 0,
         ruta: null,
         listaPresentacionPanes: [],
       },
       rutaStore: useRutasStore(),
-      columns: [
+      columns: [ 
         { name: "nombre", label: "NOMBRE", field: "nombre" },
         {
+          name: "charolas",
+          label: "CHAROLAS",
+          field: "charolas",
+          align: "center",
+        },
+        {
           name: "cargaDia",
-          label: "CARGA DIA",
+          label: "UNIDADES",
           field: "cargaDia",
           align: "center",
         },
@@ -118,19 +126,19 @@ export default {
         { id: 4, label: "PZ Buenas" },
       ],
       SalidaService: useService("Salidas"),
-    };
+    }; 
   },
   created() {},
   methods: {
     GuardarRegistro() {
       this.registroDiario.totalSalida = this.total;
-      if( this.rutaStore.diaSemana === 7){
-        this.$q.notify({
-          message: "Los domingos no hay Carga de pan",
-          type: "negative",
-        });
-        return
-      }
+      // if( this.rutaStore.diaSemana === 7){
+      //   this.$q.notify({
+      //     message: "Los domingos no hay Carga de pan",
+      //     type: "negative",
+      //   });
+      //   return
+      // }
       if (this.registroDiario.ruta === null) {
         this.$q.notify({
           message: "Selecciona una ruta para Guardar",
@@ -140,7 +148,15 @@ export default {
       } 
       
 
-      this.registroDiario.listaPresentacionPanes = this.listaPresentacionPanes.map(el => ({...el, cargaDia: el.cargaDia === null ? 0 : el.cargaDia === '' ? 0 : el.cargaDia}));
+
+
+      this.registroDiario.listaPresentacionPanes = this.listaPresentacionPanes.map(el => ({...el,
+         cargaDia : el.cargaDia === null ? 0 : el.cargaDia === '' ? 0 : el.cargaDia  + (Number(el.charolas ?? 0) * 20)
+      }));
+      
+      console.log(this.registroDiario.listaPresentacionPanes);
+      
+      
       this.SalidaService.Post({
         obj: this.registroDiario,
         Resolve: (res) => {
@@ -149,19 +165,20 @@ export default {
       });
     },
     HandleRutaSelected() {
-      if( this.rutaStore.diaSemana === 7){
-        this.$q.notify({
-          message: "Los domingos no hay Carga de pan",
-          type: "negative",
-        });
-        this.registroDiario.ruta = null
-        return
-      }
+      // if( this.rutaStore.diaSemana === 7){
+      //   this.$q.notify({
+      //     message: "Los domingos no hay Carga de pan",
+      //     type: "negative",
+      //   });
+      //   this.registroDiario.ruta = null
+      //   return
+      // }
       this.SalidaService.GetById({
         id: this.registroDiario.ruta.idRuta,
         Resolve: (res) => {
           this.listaPresentacionPanes = res.data.map(el => {
             el.cargaDia = el.cargaDia === 0 ? null : el.cargaDia
+            el.charolas = el.charolas === 0 ? undefined : el.charolas
             return el
           }); 
         },
@@ -172,10 +189,10 @@ export default {
     total() {
       let total = 0;
       this.listaPresentacionPanes.forEach((element) => {
-        const cant = element.enExistencia + element.cargaDia;
+        let cant = element.enExistencia + element.cargaDia + (Number(element.charolas ?? 0) * 20) ;
         total = total + cant * element.precio;
       });
-      return total;
+      return total ;
     },
   },
 };

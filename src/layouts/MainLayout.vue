@@ -155,6 +155,24 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-dialog v-model="showModalCambioPass">
+      <q-card style="max-width: 80vw; width: 600px">
+        <q-card-section>
+          <h6 class="q-ma-none text primary">
+            Cambio de contraseña
+          </h6>
+          <p>por seguridad debes agregar una nueva contraseña a tu usuario por favor ingresa y confirma tu nueva contraseña</p>
+          <q-separator/>
+          <div class="row col-12 items-center q-pt-sm column-gap">
+            <q-input filled label="Contraseña Nueva" v-model="cambioPass.newPass" dense stack-label ></q-input>
+            <q-input filled label="Confirma tu Contraseña" v-model="cambioPass.confirmaPass" dense stack-label ></q-input>
+            <q-btn label="Guardar" color="primary" @click="ChangePass" size=""></q-btn>
+          </div>
+        </q-card-section>
+
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -171,6 +189,11 @@ export default {
       btnToggle: "Home",
       linkActivo: "home",
       linkSubMenu: "",
+      cambioPass:{
+        newPass:'',
+        confirmaPass:''
+      },
+      showModalCambioPass:false,
       leftDrawerOpen: false,
       usuario: {},
       mobilActivo: "home",
@@ -216,6 +239,9 @@ export default {
         .then((res) => {
           if (res.data.idacceso > 0) {
             //vm.$store.commit('user/updateLogueado', res.data)
+
+            this.showModalCambioPass = res.data.usuario.opcionCambioPass === 1
+          
             vm.usuario = res.data;
             const padresFiltrados = paths
               .filter((el) =>
@@ -234,7 +260,7 @@ export default {
                 };
               })
               .filter((item) => item.children.length > 0);
-
+            
             this.listFormularios = padresFiltrados; // .filter(el => el.rolsWithPermision.includes(this.usuario.usuario.rol))
             //this.RedirectFromUserPermision()
             const hijos = this.listFormularios.map((el) => el.children).flat();
@@ -254,6 +280,17 @@ export default {
             console.log("No hay wifi");
           }
         });
+    },
+    ChangePass(){
+      if (this.cambioPass.newPass === this.cambioPass.confirmaPass) {
+        this.$axios.post('Usuarios/CambiarPassword',this.cambioPass).then(res => {
+          this.showModalCambioPass = false
+          this.cambioPass.confirmaPass =''
+          this.cambioPass.newPass = ''
+        })
+      }else{
+        this.$q.notify({message:'Las contraseñas no coinciden',type:'warning'})
+      }
     },
     SelectRouteFromUrl() {
       const path = this.$route.fullPath.toLowerCase();

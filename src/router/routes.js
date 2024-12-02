@@ -53,6 +53,10 @@ const routes = [
         component: () => import('pages/Index.vue')
       },
       {
+        path: '/Gastos',
+        component: () => import('pages/GastosGenerales.vue')
+      },
+      {
         path: '',
         component: () => import('pages/Index.vue')
       },
