@@ -42,6 +42,20 @@
               </q-td>
 
           </template>
+          <template v-slot:body-cell-cantEmpaque="props">
+            <q-td :props="props">
+                <q-input
+                  v-model.number="props.row.cantEmpaque"
+                  input-class="text-right"
+                  type="number"
+                  class="q-py-none"
+                  :label="props.col.label"
+                  filled
+                  dense
+                />
+              </q-td>
+
+          </template>
 
         </q-table>
         <q-btn label="Actualiza precios" @click="() => {
@@ -96,6 +110,13 @@ export default {
           align: "left",
           label: "PRECIO",
           field: "precio",
+          sortable: true,
+        },
+        {
+          name: "cantEmpaque",
+          align: "left",
+          label: "CANT EMPAQUE",
+          field: "cantEmpaque",
           sortable: true,
         },
         { name: "actions", align: "center", label: "", field: "" },

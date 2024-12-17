@@ -35,10 +35,14 @@
               </h6>
               <p
                 class="q-ma-none"
-                v-else-if="props.col.name === 'enExistencia'"
+                v-else-if="props.col.name === 'enExistencia' "
               >
                 {{ props.row.enExistencia }}
               </p>
+              <p class="q-ma-none" v-else-if="props.col.name === 'totalpz'">
+                {{ Number(props.row.enExistencia ?? 0) + (Number(props.row.cantEmpaque?? 0)*Number(props.row.charolas?? 0)) + Number(props.row.cargaDia?? 0) }}
+              </p>
+
               <q-input
                 v-else
                 v-model.number="props.row[props.col.name]"
@@ -66,7 +70,14 @@
             <span class="text-subtitle1"> Total {{ currency(total) }} </span>
           </div>
           <q-btn
+            label="Editar"
+            color="primary"
+            v-if="haveSalida"
+            @click="EditRegistro"
+          ></q-btn>
+          <q-btn
             label="Guardar"
+            v-else
             color="primary"
             @click="GuardarRegistro"
           ></q-btn>
@@ -114,6 +125,12 @@ export default {
           field: "enExistencia",
           align: "center",
         },
+        {
+          name: "totalpz",
+          label: "CANT TOTAL",
+          field: "totalpz",
+          align: "center",
+        },
       ],
       listaPresentacionPanes: [
 
@@ -131,14 +148,17 @@ export default {
   created() {},
   methods: {
     GuardarRegistro() {
+      
+      this.PrepareObj()
+      this.SalidaService.Post({
+        obj: this.registroDiario,
+        Resolve: (res) => {
+          this.registroDiario.ruta = null;
+        },
+      });
+    },
+    PrepareObj(){
       this.registroDiario.totalSalida = this.total;
-      // if( this.rutaStore.diaSemana === 7){
-      //   this.$q.notify({
-      //     message: "Los domingos no hay Carga de pan",
-      //     type: "negative",
-      //   });
-      //   return
-      // }
       if (this.registroDiario.ruta === null) {
         this.$q.notify({
           message: "Selecciona una ruta para Guardar",
@@ -147,17 +167,14 @@ export default {
         return
       } 
       
-
-
-
       this.registroDiario.listaPresentacionPanes = this.listaPresentacionPanes.map(el => ({...el,
-         cargaDia : el.cargaDia === null ? 0 : el.cargaDia === '' ? 0 : el.cargaDia  + (Number(el.charolas ?? 0) * 20)
+         cargaDia : el.cargaDia === null ? 0 : el.cargaDia === '' ? 0 : el.cargaDia  + (Number(el.charolas ?? 0) * el.cantEmpaque),
+         charolas : el.charolas ?? 0
       }));
-      
-      console.log(this.registroDiario.listaPresentacionPanes);
-      
-      
-      this.SalidaService.Post({
+    },
+    EditRegistro(){
+      this.PrepareObj()
+      this.SalidaService.Put({
         obj: this.registroDiario,
         Resolve: (res) => {
           this.registroDiario.ruta = null;
@@ -165,17 +182,10 @@ export default {
       });
     },
     HandleRutaSelected() {
-      // if( this.rutaStore.diaSemana === 7){
-      //   this.$q.notify({
-      //     message: "Los domingos no hay Carga de pan",
-      //     type: "negative",
-      //   });
-      //   this.registroDiario.ruta = null
-      //   return
-      // }
       this.SalidaService.GetById({
         id: this.registroDiario.ruta.idRuta,
         Resolve: (res) => {
+          this.listaPresentacionPanes = []
           this.listaPresentacionPanes = res.data.map(el => {
             el.cargaDia = el.cargaDia === 0 ? null : el.cargaDia
             el.charolas = el.charolas === 0 ? undefined : el.charolas
@@ -189,11 +199,14 @@ export default {
     total() {
       let total = 0;
       this.listaPresentacionPanes.forEach((element) => {
-        let cant = element.enExistencia + element.cargaDia + (Number(element.charolas ?? 0) * 20) ;
+        let cant = element.enExistencia + element.cargaDia + (Number(element.charolas ?? 0) * element.cantEmpaque) ;
         total = total + cant * element.precio;
       });
       return total ;
     },
+    haveSalida(){
+      return this.listaPresentacionPanes.map(el => el.idSalidaRel).some(el => el > 0)
+    }
   },
 };
 </script>
