@@ -3,10 +3,10 @@
     <div class="row row-gap col-12 col-md-10 col-lg-8">
       <header class="row col-12" style="height: fit-content">
         <q-card class="row col-12 q-pt-md q-px-md">
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <p class="text-subtitle1">{{ fechaConsulta }}</p>
           </div>
-          <p class="text-subtitle1 col-6">
+          <p class="text-subtitle1 col-12 col-md-6">
             Total de Venta
             <span class="q-px-sm text-bold">{{ currency(TotalVenta) }} </span>
           </p>
@@ -18,7 +18,7 @@
         </p>
 
         <div class="row col-12">
-          <div class="row col-3 q-pa-sm" v-for="(dia, index) in dataReporte" :key="index">
+          <div class="row col-12 col-md-3 q-pa-sm" v-for="(dia, index) in dataReporte" :key="index">
             <q-card class="row q-px-md q-pt-md q-pb-sm q-mb-sm">
               <div class="row col-12 items-center">
                 <header class=" row items-center col-12 ">
@@ -136,7 +136,12 @@
             <h6 class="q-ma-none col-4 text-right text-primary">{{ diaSelected.ruta.nombreRuta }}</h6>
           </q-card-section>
           <q-card-section>
-            <header class="row col-12 q-mb-xs">
+            <q-table :rows="diaSelected.salida.listaPresentacionPanes"
+            table-header-class="text-secondary"
+            :pagination="{rowsPerPage:0}" dense :columns="columnsDetalle">
+
+            </q-table>
+            <!-- <header class="row col-12 q-mb-xs">
               <row class="col-4 text-subtitle2 text-secondary">Tipo Pan</row>
               <row class="col-2 text-center text-subtitle2 text-secondary">Carga dia</row>
               <row class="col-1 text-center text-subtitle2 text-secondary">Merma</row>
@@ -162,7 +167,7 @@
               <div class="row col-1 q-pa-sm justify-center">
                 {{ pan.kiosko }}
               </div>
-            </div>
+            </div> -->
           </q-card-section>
         </q-card>
       </q-dialog>
@@ -186,6 +191,38 @@ export default {
         to: "",
         valor: 0,
       },
+      columnsDetalle:[
+      {
+          label:'NOMBRE',
+          field:'nombre',
+          align:'left'
+        },
+        {
+          label:'CARGA DIA',
+          field:'cargaDia',
+          align:'center'
+        },
+        {
+          label:'MERMA',
+          field:'merma',
+          align:'center'
+        },
+        {
+          label:'PAN BUENO',
+          field:'pzBuenas',
+          align:'center'
+        },
+        {
+          label:'OXXO',
+          field:'oxxo',
+          align:'center'
+        },
+        {
+          label:'KIOSKO',
+          field:'kiosko',
+          align:'center'
+        }
+      ],
       fechaConsulta: "",
       dataReporte: [
         {
