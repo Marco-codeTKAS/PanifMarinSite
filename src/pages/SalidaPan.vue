@@ -169,7 +169,7 @@ export default {
       
       this.registroDiario.listaPresentacionPanes = this.listaPresentacionPanes.map(el => ({...el,
          cargaDia : el.cargaDia === null ? 0 : el.cargaDia === '' ? 0 : el.cargaDia  + (Number(el.charolas ?? 0) * el.cantEmpaque),
-         charolas : el.charolas ?? 0
+         charolas : Number(el.charolas  ?? 0) 
       }));
     },
     EditRegistro(){

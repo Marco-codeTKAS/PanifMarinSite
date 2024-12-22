@@ -121,7 +121,7 @@
               <div class="row col-12 column-gap q-mb-md">
                   <q-input class="col-4 q-pa-xs" v-model.number="faltante" type="number" filled dense label="faltante"></q-input>
                   <q-input class="col-4 q-pa-xs" filled v-model.number="gasto" type="number" dense label="Gasto"></q-input>
-                  <q-input class="col q-pa-xs" filled v-model.number="gasto" type="number" dense label="Abono"></q-input>
+                  <q-input class="col q-pa-xs" filled v-model.number="abono" type="number" dense label="Abono"></q-input>
               </div>  
               <div class="row col-12 justify-between items-center q-px-xs">
                 <div class="row column-gap items-center" style="position: relative;">
@@ -148,7 +148,7 @@
               <div class="col-4 text-subtitle2 "> 
                 {{ currency(Comision) }} 
               </div>
-              <div class="col-4 text-subtitle2 ">{{ currency(devolucionTotal) }}</div>
+              <div class="col-4 text-subtitle2 ">{{ currency(devolucionMerma) }}</div>
               <div :class="[' text-subtitle2 ', Diferencia < 0 ? 'text-red-5': 'text-green-5' ]" >{{ currency(Diferencia) }}</div>
             </div>
           </div>
@@ -185,6 +185,9 @@ export default {
         ruta: null,
         listaPresentacionPanes: [],
         idSalidaRel: 0,
+        totalOxxo:0,
+        totalKiosko:0,
+        totalDevuelto:0,
         idRecepcionRel: 0,
       },
       listadoBilletes: [
@@ -256,16 +259,26 @@ export default {
       return total + Number(this.faltante) + Number(this.gasto) + Number(this.abono)
     },
     Diferencia(){
-      const res = (this.total * 0.05) - this.devolucionTotal 
+      const res = (this.total * 0.05) - this.devolucionMerma 
+      console.log(this.total,(this.total * 0.05),this.devolucionMerma);
+      
       return res
     },
     DiferenciaTotales(){
       return this.total - this.TotalIngresado
     },
-    devolucionTotal(){
+    devolucionMerma(){
       let devTotal = 0;
       this.listaPresentacionPanes.forEach((element) => {
         const cant = element.merma;
+        devTotal = devTotal + (cant * element.precio);
+      });
+      return devTotal;
+    },
+    devolucionBuenas(){
+      let devTotal = 0;
+      this.listaPresentacionPanes.forEach((element) => {
+        const cant = element.pzBuenas;
         devTotal = devTotal + (cant * element.precio);
       });
       return devTotal;
@@ -323,7 +336,11 @@ export default {
           oxxo: Number(el.oxxo ?? 0),
           kiosko:Number(el.kiosko ?? 0)
         }));
-        
+
+        this.registroDiario.totalOxxo = this.GetTotalByProp(this.registroDiario.listaPresentacionPanes,'oxxo')
+        this.registroDiario.totalKiosko = this.GetTotalByProp(this.registroDiario.listaPresentacionPanes,'kiosko')
+        this.registroDiario.totalDevuelto = this.devolucionMerma + this.devolucionBuenas
+
       this.RecepcionService.Post({
         obj: this.registroDiario,
         Resolve: (res) => {
@@ -331,6 +348,9 @@ export default {
           this.HandleRutaSelected();
         },
       });
+    },
+    GetTotalByProp(lista,propName){
+      return lista.map(el => el[propName] * el.precio).reduce((act,acum) => acum + act)
     },
     ValidaCantidades() {
 
@@ -370,9 +390,9 @@ export default {
         obj: {
           idRecepcion: this.registroDiario.idRecepcionRel,
           monto: this.TotalIngresado,
-          faltante:this.faltante,
-          gasto:this.gasto,
-          abono:this.abono,
+          faltante: Number(this.faltante) ?? 0,
+          gasto:Number(this.gasto) ?? 0,
+          abono:Number(this.abono) ?? 0,
           desgloce: this.listadoBilletes.map(el => ({...el, cantidad: Number(el.cantidad ?? 0) })),
         },
         Resolve: (res) => {

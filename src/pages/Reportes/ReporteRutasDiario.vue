@@ -12,88 +12,121 @@
           </p>
         </q-card>
       </header>
-
-      <div class="col-12">
+      <div class="row col-12">
         <p class="text-subtitle2 text-primary q-pt-md col-12">
           Detalle de las rutas
         </p>
 
-        <q-card class="row col-12 q-px-md q-pt-md q-pb-sm q-mb-sm" v-for="(dia, index) in dataReporte" :key="index">
-          <div class="row col-12 items-center">
-            <header class="col-12">
-              <p class="q-ma-none q-pb-sm text-subtitle1 text-bold text-primary">
-                {{ dia.ruta?.nombreRuta }}
-              </p>
-            </header>
-            <div class="row col-12 justify-between">
-              <!--Muestra de horarios -->
-              <div class="row col-2">
-                <p class="row col-12 q-ma-none q-pb-sm">
-                  Salio a las<span class="text-subtitle2 col-12">{{
-                    dia.salida.fechaRegistro
-                  }}</span>
-                </p>
-                <p class="row col-12 q-ma-none">
-                  Llego a las
-                  <span class="text-subtitle2 col-12" v-if="dia.recepcion.idRecepcion !== 0">{{
-                    dia.recepcion.fechaRegistro }}</span>
-                  <span class="text-subtitle2 col-12" v-else>Sin entrega</span>
-                </p>
-              </div>
-              <!-- Detalle de usuarios -->
-              <div class="col">
-                <p class="row col-12 q-ma-none q-pb-sm">
-                  Entrego<span class="text-subtitle2 col-12">{{
-                    currency(dia.salida?.usuario.nombre)
-                  }}</span>
-                </p>
-                <p class="row col-12 q-ma-none">
-                  Recibió
-                  <span class="text-subtitle2 col-12" v-if="dia.recepcion.idRecepcion !== 0">{{
-                    dia.recepcion.usuario.nombre }}</span>
-                  <span class="text-subtitle2 col-12" v-else>Sin entrega</span>
-                </p>
-              </div>
-              <!-- Muestra de venta -->
-              <div class="row col-5">
-                <div class="col-2">
-                  <p class="row col-12 q-ma-none q-pb-sm">
-                    Se llevo<span class="text-subtitle2 col-12">{{
-                      currency(dia.salida?.totalSalida)
-                      }}</span>
-                  </p>
-                  <p class="row col-12 q-ma-none">
-                    Entrego
-                    <span class="text-subtitle2 col-12" v-if="dia.recepcion.idRecepcion !== 0">{{
-                      currency(dia.desgloce?.monto - dia.desgloce?.faltante - dia.desgloce.gasto) }}</span>
-                    <span class="text-subtitle2 col-12" v-else>Sin entrega</span>
-                  </p>
-                </div>
-                <div class="row col relative">
+        <div class="row col-12">
+          <div class="row col-3 q-pa-sm" v-for="(dia, index) in dataReporte" :key="index">
+            <q-card class="row q-px-md q-pt-md q-pb-sm q-mb-sm">
+              <div class="row col-12 items-center">
+                <header class=" row items-center col-12 ">
+                  <div class="row justify-around items-center col-12">
+                    <p class="col-6 q-ma-none q-pb-sm text-subtitle1 text-bold text-primary"> {{ dia.ruta?.nombreRuta }}
+                    </p>
+                    <p class="col q-ma-none  q-pb-sm text-right text-caption text-grey-8">{{ dia.salida.fechaRegistro }}
+                      -
+                      {{ dia.recepcion.fechaRegistro }}</p>
+                  </div>
+                </header>
+                <div class="col-12 justify-between section">
+                  <!-- Información básica -->
+                  <div class="divider"></div>
 
-                  <p class="row col-12 q-ma-none q-pb-sm">
-                    Faltante<span class="text-subtitle2 col-12">{{
-                      currency(dia.desgloce?.faltante)
-                      }}</span>
-                  </p>
-                  <p class="row col-12 q-ma-none">
-                    Gasto
-                    <span class="text-subtitle2 col-12" v-if="dia.recepcion.idRecepcion !== 0">{{
-                      currency(dia.desgloce.gasto) }}</span>
-                    <span class="text-subtitle2 col-12" v-else>Sin entrega</span>
-                  </p>
-                </div>
+                  <!-- Personas involucradas -->
+                  <div class="row col-12">
+                    <div class="col-6">
+                      <h3>Enviado por</h3>
+                      <p style="font-size: 0.9em !important;">{{ dia.salida.usuario.nombre }}</p>
+                    </div>
+                    <div class="col-6">
+                      <h3>Recibido por</h3>
+                      <p style="font-size: 0.9em !important;">{{ dia.recepcion.usuario.nombre }}</p>
+                    </div>
+                  </div>
 
+
+                  <div class="divider"></div>
+
+                  <!-- Dinero relacionado -->
+                  <div class="section">
+                    <h3>Se llevo</h3>
+                    <p class="text-positive">{{ currency(dia.salida.totalSalida) }}</p>
+                  </div>
+                  <div class="row col-12  section">
+                    <div class="col-6">
+                      <h3>Total Entregado</h3>
+                      <p class="text-secondary">{{ currency(dia.desgloce.monto) }}</p>
+                    </div>
+                    <div class="col-6">
+                      <h3>Total Devuelto</h3>
+                      <p class="text-negative">{{ currency(dia.recepcion.totalDevuelto) }}</p>
+                    </div>
+
+                  </div>
+                  <div class="row col-12">
+                    <div class="col-6">
+                      <h3>Comisión </h3>
+                      <p>{{ currency(dia.desgloce.comision) }}</p>
+                    </div>
+                    <div class="col">
+                      <h3>Abonado</h3>
+                      <p class="text-negative">{{ currency(dia.desgloce.abono) }}</p>
+                    </div>
+                  </div>
+
+
+                  <div class="divider"></div>
+
+                  <!-- Comisión y Gastos -->
+                  <!-- <div class="section">
+                <h3>Diferencia</h3>
+                <p>{{ currency(dia.desgloce.diferencia ?? 0)}}</p>
+              </div> -->
+                  <div class="row col-12">
+                    <div class="col">
+                      <h3>Faltante</h3>
+                      <p class="text-negative">{{ currency(dia.desgloce?.faltante) }}</p>
+                    </div>
+                    <div class="col">
+                      <h3>Gastos</h3>
+                      <p class="text-negative">{{ currency(dia.desgloce.gasto) }}</p>
+                    </div>
+
+
+                  </div>
+
+                  <div class="divider"></div>
+                  <div class="row col-12">
+                    <div class="col">
+                      <h3>Oxxo</h3>
+                      <p class="text-secondary">{{ currency(dia.recepcion.totalOxxo) }}</p>
+                    </div>
+                    <div class="col">
+                      <h3>Kiosko</h3>
+                      <p class="text-secondary">{{ currency(dia.recepcion.totalKiosko) }}</p>
+                    </div>
+                  </div>
+                  <div class="divider"></div>
+
+                  <!-- Pie de página -->
+                  <div class="footer">
+                    Reporte del dia
+                  </div>
+                </div>
               </div>
-            </div>
+              <footer class="row col-12 justify-center text-accent q-mt-sm">
+                <div>
+                  <q-btn flat color="primary" label="Detalles" size="0.95em" dense
+                    @click="handleShowDetalle(dia)"></q-btn>
+                </div>
+              </footer>
+            </q-card>
           </div>
-          <footer class="row col-12 text-accent q-mt-sm">
-            <div>
-              <q-btn flat color="secondary" label="Detalles" size="0.95em" dense
-                @click="handleShowDetalle(dia)"></q-btn>
-            </div>
-          </footer>
-        </q-card>
+
+        </div>
+
       </div>
 
       <q-dialog v-model:model-value="showDetalleDia">
@@ -104,27 +137,37 @@
           </q-card-section>
           <q-card-section>
             <header class="row col-12 q-mb-xs">
-              <row class="col-5 text-subtitle2 text-secondary">Tipo Pan</row>
-              <row class="col-3 text-center text-subtitle2 text-secondary">Carga dia</row>
-              <row class="col-2 text-center text-subtitle2 text-secondary">Merma</row>
-              <row class="col-2 text-center text-subtitle2 text-secondary">Bueno</row>
+              <row class="col-4 text-subtitle2 text-secondary">Tipo Pan</row>
+              <row class="col-2 text-center text-subtitle2 text-secondary">Carga dia</row>
+              <row class="col-1 text-center text-subtitle2 text-secondary">Merma</row>
+              <row class="col-1 text-center text-subtitle2 text-secondary">Bueno</row>
+              <row class="col-1 text-center text-subtitle2 text-secondary">Oxxo</row>
+              <row class="col-1 text-center text-subtitle2 text-secondary">Kiosko</row>
             </header>
             <div :class="[index % 2 === 0 ? 'bg-grey-2' : '', 'row col-12']"
               v-for="(pan, index) in diaSelected.salida.listaPresentacionPanes" :key="pan.idPan">
-              <div class="row col-5 q-pa-sm text-bold">{{ pan.nombre }}</div>
-              <div class="row col-3 q-pa-sm justify-center">
+              <div class="row col-4 q-pa-sm text-bold">{{ pan.nombre }}</div>
+              <div class="row col-2 q-pa-sm justify-center">
                 {{ pan.cargaDia }}
               </div>
-              <div class="row col-2 q-pa-sm justify-center">
+              <div class="row col-1 q-pa-sm justify-center">
                 {{ pan.merma }}
               </div>
-              <div class="row col-2 q-pa-sm justify-center">
+              <div class="row col-1 q-pa-sm justify-center">
                 {{ pan.pzBuenas }}
+              </div>
+              <div class="row col-1 q-pa-sm justify-center">
+                {{ pan.oxxo }}
+              </div>
+              <div class="row col-1 q-pa-sm justify-center">
+                {{ pan.kiosko }}
               </div>
             </div>
           </q-card-section>
         </q-card>
       </q-dialog>
+
+
     </div>
   </q-page>
 </template>
@@ -201,6 +244,8 @@ export default {
             totalSalida: 0,
             totalRecepcion: 10766,
             estatus: 3,
+            oxxo: 0,
+            kiosko: 0,
             idPanaderia: 1,
             listaPresentacionPanes: [],
             ruta: {
@@ -217,10 +262,15 @@ export default {
           desgloce: {
             idDesgloce: 1,
             monto: 10766,
+            comision: 20,
+            gasto: 0,
+            faltante: 0,
             desgloce: null,
+            devPanMalo: 0,
             fecha: "2024-11-01T21:58:26.31",
             idUsuario: 1,
             idRecepcion: 1017,
+            abono: 0,
             estatus: 1,
           },
         },
@@ -312,7 +362,7 @@ export default {
   },
   computed: {
     TotalVenta() {
-      const res = this.dataReporte.map(el => el.desgloce.monto).reduce((acum, act) => acum + act,0)
+      const res = this.dataReporte.map(el => el.desgloce.monto).reduce((acum, act) => acum + act, 0)
       return res;
     },
   },
@@ -340,6 +390,13 @@ export default {
               el.recepcion.idRecepcion === 0
                 ? "Sin Entrega"
                 : date.formatDate(el.recepcion.fechaRegistro, "hh:MM a");
+
+            el.desgloce.comision = el.recepcion.totalRecepcion >= 10800
+              ? el.recepcion.totalRecepcion * 0.1
+              : el.recepcion.totalRecepcion < 8999
+                ? el.recepcion.totalRecepcion * 0.08
+                : el.recepcion.totalRecepcion * 0.09;
+
             return el;
           });
           console.log(res.data.data);
@@ -372,5 +429,58 @@ export default {
   background-color: white;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14),
     0 3px 1px -2px rgba(0, 0, 0, 0.12);
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  padding: 20px;
+  margin: 10px;
+}
+
+.section {
+  margin-bottom: 10px;
+}
+
+h3 {
+  margin: 0;
+  font-size: 0.9em;
+  line-height: 1em;
+  color: #555;
+}
+
+.section p {
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
+}
+
+.divider {
+  border-top: 1px solid #1d1b1b;
+  margin: 10px 0;
+}
+
+.card-header {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #1976D2;
+  /* Azul Material Design */
+  text-align: center;
+}
+
+.highlight {
+  color: #D32F2F;
+  /* Rojo Material Design */
+  font-weight: bold;
+}
+
+.footer {
+  text-align: center;
+  font-size: 0.9em;
+  color: #777;
 }
 </style>
