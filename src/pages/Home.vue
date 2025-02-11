@@ -10,6 +10,18 @@
           <q-img contain src="~/assets/ICONOColima.png" style="max-width:40px; max-height:40px;"></q-img>
           <p class="text-h4 q-ma-none">Inicio de Sesion </p>
           <p class="text-h6 q-ma-none">Bienvenido al Sistema de Panificadora Marin</p>
+
+          <h5>Hola fatima este es el proyecto que te digo. Por cierto ya que estas aqui deja un like y comparte jajaja
+            NTC  Nota: no me salio el emoji sorry</h5>
+          <div class="row col-6">
+            <div class="emoji">
+              <div class="eye left"></div>
+              <div class="eye right"></div>
+              <div class="mouth">
+                <div class="tongue"></div>
+              </div>
+            </div>
+          </div>
           <!-- <p class="text-subtitle">¿No estas registrado?
             <q-btn class="q-pa-none self-baseline" flat label="Registrate" size="md" dense color="primary" />
           </p> -->
@@ -126,4 +138,66 @@ export default {
 #background {
   background-image: linear-gradient(fff, 0000);
 }
+body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .emoji {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            background-color: #ffcc00;
+            border-radius: 50%;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .eye {
+            position: absolute;
+            top: 35px;
+            width: 20px;
+            height: 30px;
+            background-color: black;
+            border-radius: 50%;
+        }
+
+        .eye.left {
+            left: 30px;
+        }
+
+        .eye.right {
+            right: 30px;
+        }
+
+        .mouth {
+            position: absolute;
+            bottom: 20px;
+            width: 50px;
+            height: 25px;
+            background-color: black;
+            border-radius: 0 0 50px 50px;
+            overflow: hidden;
+        }
+
+        .tongue {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 80px;
+            z-index: 1000;
+            background-color: #ff6666;
+            border-radius: 50%;
+            animation: sacarLengua 1s infinite ease-in-out;
+        }
+
+
 </style>
