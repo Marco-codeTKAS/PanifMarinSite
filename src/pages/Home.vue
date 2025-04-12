@@ -8,20 +8,8 @@
       <q-card class="column justify-around fit q-mx-md">
         <q-card-section class="row q-mx-md self-start">
           <q-img contain src="~/assets/ICONOColima.png" style="max-width:40px; max-height:40px;"></q-img>
-          <p class="text-h4 q-ma-none">Inicio de Sesion </p>
-          <p class="text-h6 q-ma-none">Bienvenido al Sistema de Panificadora Marin</p>
-
-          <h5>Hola fatima este es el proyecto que te digo. Por cierto ya que estas aqui deja un like y comparte jajaja
-            NTC  Nota: no me salio el emoji sorry</h5>
-          <div class="row col-6">
-            <div class="emoji">
-              <div class="eye left"></div>
-              <div class="eye right"></div>
-              <div class="mouth">
-                <div class="tongue"></div>
-              </div>
-            </div>
-          </div>
+          <p class="text-h4 q-ma-none">Inicio de Sesion Test </p>
+          <p class="text-h6 q-ma-none">Bienvenido al Sistema de Panificadora Marin</p>          
           <!-- <p class="text-subtitle">¿No estas registrado?
             <q-btn class="q-pa-none self-baseline" flat label="Registrate" size="md" dense color="primary" />
           </p> -->
