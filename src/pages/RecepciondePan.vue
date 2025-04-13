@@ -43,9 +43,11 @@
               </div>
             </template>
             <template v-slot:body-cell="props">
-              <q-td :props="props">
+              <q-td :props="props" :style="[this.$q.screen.lt.md ? 'padding: 0 6px' : '']">
                 <p class="q-ma-none" v-if="props.col.name === 'nombre'">
-                  {{ props.row.nombre }}
+                  {{ props.row.nombre.length > 6 && this.$q.screen.lt.md
+                    ? props.row.nombre.substring(0, 5) + "..."
+                    : props.row.nombre }}
                 </p>
                 <q-input
                   v-else
@@ -209,12 +211,17 @@ export default {
       currency: formatCurrency,
       rutaStore: useRutasStore(),
       columns: [
-        { name: "nombre", label: "NOMBRE", field: "nombre" },
+        { name: "nombre", 
+        label: this.$q.screen.lt.md ? "NOM" : "NOMBRE", 
+        field: "nombre" 
+      },
         // { name: "cargaDia", label: "CARGA DIA", field: "cargaDia",align:'center' },
-        { name: "merma", label: "MERMA", field: "merma", align: "center" },
+        { name: "merma", 
+        label: this.$q.screen.lt.md ? "MRMA" : "MERMA", 
+        field: "merma", align: "center" },
         {
           name: "pzBuenas",
-          label: "PZ BUENAS",
+          label: this.$q.screen.lt.md ? "BNO" : "PZ BUENAS",
           field: "pzBuenas",
           align: "center",
         },
@@ -226,7 +233,7 @@ export default {
         },
         {
           name: "kiosko",
-          label: "KIOSKO",
+          label: this.$q.screen.lt.md ? "KSKO" :"KIOSKO",
           field: "kiosko",
           align: "center",
         },
@@ -247,7 +254,7 @@ export default {
     total() {
       let total = 0;
       this.listaPresentacionPanes.forEach((element) => {
-        const cant = element.cargaDia - element.merma - element.pzBuenas - Number(element.oxxo ?? 0) - Number(element.kiosko ?? 0);
+        const cant = element.cargaDia - element.merma - Number(element.pzBuenas??0) - Number(element.oxxo ?? 0) - Number(element.kiosko ?? 0);
         total = total + cant * element.precio;
       });
       return total;

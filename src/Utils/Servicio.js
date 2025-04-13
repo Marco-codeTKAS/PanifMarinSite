@@ -14,13 +14,11 @@ export function useService(url) {
     }
       
     if (error.response?.data?.errors) {
+      Loading.hide()
       for (const element of error.response?.data?.errors) {
         Notify.create({message:element.message, type:'negative'})
       }
     }
-    
-  
-
 
     if (Reject !== null ) {
       Reject()

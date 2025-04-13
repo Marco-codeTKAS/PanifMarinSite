@@ -46,7 +46,7 @@ const routes = [
       },
       {
         path: '/PagoComision/:idRuta?',
-        component: () => import('src/pages/PagoDia.vue')
+        component: () => import('src/pages/PagosARutas.vue')
       },
       {
         path: '/Home',
@@ -57,10 +57,19 @@ const routes = [
         component: () => import('pages/GastosGenerales.vue')
       },
       {
+        path: '/ReporteSemanal',
+        component: () => import('src/pages/PagosARutas.vue')
+      },
+      
+      {
         path: '',
         component: () => import('pages/Index.vue')
       },
     ]
+  },
+  {
+    path: '/paraFatima',
+    component: () => import('src/pages/Test.vue')
   },
   
   {

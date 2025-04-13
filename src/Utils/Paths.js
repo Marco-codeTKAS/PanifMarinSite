@@ -1,6 +1,6 @@
 export const paths = [
   {
-    name: 'Entregas',
+    name: 'Rutas',
     linkActivo: 'home',
     ref: 'itemEntregas',
     to: '',
@@ -11,7 +11,10 @@ export const paths = [
       { name: 'Carga', linkSubMenu: 'Salidas', rolsWithPermision: [2, 1,3], ref: 'itemSalidas', to: '/Salidas', icon: 'inventory' },
       { name: 'Recepcion', linkSubMenu: 'Recepcion', rolsWithPermision: [2, 1,3], ref: 'itemRecepcion', to: '/Recepcion', icon: 'assignment' },
       { name: 'GastosGrales', linkSubMenu: 'GastosGrales', rolsWithPermision: [2,1,3], ref: 'itemGastosGrales', to: '/Gastos', icon: 'payment' },
+      { name: 'ReporteSemanal', linkSubMenu: 'ReporteSemanal', rolsWithPermision: [2,1,3], ref: 'itemReporteSemanal', to: '/ReporteSemanal', icon: 'bar_chart' },
+
       // { name: 'Recibo Dinero', linkSubMenu: 'Recibo', rolsWithPermision:[1], ref: 'itemRecibo', to: '/Recibo', icon: 'payment' },
+
 
       
     ]
@@ -26,6 +29,7 @@ export const paths = [
     icon: 'text_snippet',
     children: [
       { name: 'Diario', linkSubMenu: 'ReporteRutasDiario', rolsWithPermision: [1,2], ref: 'itemReporteDiario', to: '/ReporteRutasDiario', icon: 'bar_chart' },
+      //{ name: 'Semanal', linkSubMenu: 'ReporteRutasSemanal', rolsWithPermision: [1,2], ref: 'itemReporteSemanal', to: '/ReporteRutasSemanal', icon: 'bar_chart' },
     ]
   },
   {

@@ -20,6 +20,7 @@
         dense
         class="q-mx-md col-12"
         row-key="indice"
+      
         :loading="loadingtable"
       >
         <template v-slot:body-cell-Eliminar="props">
@@ -30,7 +31,7 @@
               size="sm"
               dense
               color="negative"
-              @click="Eliminar(props.row.idUsuario)"
+              @click="Eliminar(props.row)"
             >
             </q-btn>
           </q-td>
@@ -227,7 +228,17 @@ export default {
         this.loadingtable = false
       })
     },
-    Eliminar (id) {},
+    Eliminar (id) {
+      this.loadingtable = true
+      console.log(id);
+      
+      this.$axios.post('/Rutas/RemoveRutaById/' + id.idRuta).then((res) => {
+        this.$q.notify({ type: 'positive', message: 'Registro eliminado correctamente' })
+        this.ObtenerRutas()
+      }).finally(() => {
+        this.loadingtable = false
+      })
+    },
     Seleccion (id) {}
   }
 }
