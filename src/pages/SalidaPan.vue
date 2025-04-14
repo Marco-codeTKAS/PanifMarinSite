@@ -219,7 +219,7 @@ export default {
           this.listaPresentacionPanes = res.data.map((el) => {
             el.cargaDia = el.cargaDia === 0 ? null : el.cargaDia;
             if (el.cargaDia > 0 ){
-              el.charolas = el.cargaDia / 20  
+              el.charolas = el.cargaDia / el.cantEmpaque 
               el.cargaDia = null
             }
             el.charolas = el.charolas === 0 ? undefined : el.charolas;
