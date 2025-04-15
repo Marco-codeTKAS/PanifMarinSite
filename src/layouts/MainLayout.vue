@@ -27,7 +27,7 @@
             dense
             padding
             class="q-py-md q-gutter-x-sm rounded-borders row"
-            v-show="$q.screen.gt.sm"
+            v-show="$q.screen.gt.xs"
           >
             <q-item
               v-for="(item, index) in listFormularios"

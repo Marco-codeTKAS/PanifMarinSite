@@ -265,8 +265,16 @@ export default {
       }, 0);
       return total + Number(this.faltante) + Number(this.gasto) + Number(this.abono)
     },
+    totalForComisiones(){
+      let total = 0;
+      this.listaPresentacionPanes.forEach((element) => {
+        const cant = element.cargaDia - element.merma - Number(element.pzBuenas??0) ;
+        total = total + cant * element.precio;
+      });
+      return total;
+    },
     Diferencia(){
-      const res = (this.total * 0.05) - this.devolucionMerma 
+      const res = (this.totalForComisiones * 0.05) - this.devolucionMerma 
       console.log(this.total,(this.total * 0.05),this.devolucionMerma);
       
       return res
@@ -292,11 +300,11 @@ export default {
     },
     Comision(){
       const res =
-        this.total >= 10800
-          ? this.total * 0.1
-          : this.total < 8999
-          ? this.total * 0.08
-          : this.total * 0.09;
+        this.totalForComisiones >= 10800
+          ? this.totalForComisiones * 0.1
+          : this.totalForComisiones < 8999
+          ? this.totalForComisiones * 0.08
+          : this.totalForComisiones * 0.09;
       return res;
     }
   },
